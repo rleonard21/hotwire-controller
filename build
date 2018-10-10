@@ -1,0 +1,5 @@
+#!/bin/bash
+
+echo "Testing compilation..."
+avr-gcc -g -Os -mmcu=atmega32 -c main.cpp PWM.cpp
+echo "Success."
