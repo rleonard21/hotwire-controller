@@ -11,6 +11,7 @@
 
 #include "sensors/INA219.h"
 #include "PWM.h"
+#include "Hotwire.h"
 
 int main(void) {
 
