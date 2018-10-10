@@ -7,13 +7,13 @@
 
 #include <stdint.h>
 
-struct PWM {
-
+struct PWM_16_bit {
+    uint16_t counter;
 };
 
-void PWM_init(PWM *pwm);
-void PWM_set(PWM *pwm, uint16_t counter);
-void PWM_start(PWM *pwm);
-void PWM_stop(PWM *pwm);
+void PWM_init(struct PWM_16_bit *pwm);
+void PWM_set(struct PWM_16_bit *pwm, uint16_t counter);
+void PWM_start(struct PWM_16_bit *pwm);
+void PWM_stop(struct PWM_16_bit *pwm);
 
 #endif
