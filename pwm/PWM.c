@@ -11,5 +11,5 @@ void PWM_init(struct PWM_16_bit *pwm) {
 
 
 void PWM_start(struct PWM_16_bit *pwm) {
-    PORTD = 0x00;
+
 }
