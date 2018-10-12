@@ -1,4 +1,4 @@
-// PWM.h
+// PWM.c
 // Hotwire Controller Project
 // Written by Robert Leonard
 
@@ -13,6 +13,7 @@ void PWM_init(struct PWM_16_bit *pwm, uint16_t *output_register) {
     // set the MOSFET pin an an output
     // enable the 16 bit timer
     // set the timer prescaler
+    // set the timer to 0...?
 }
 
 void PWM_set(struct PWM_16_bit *pwm, uint16_t setting) {
