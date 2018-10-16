@@ -5,7 +5,7 @@
 #include "PWM.h"
 #include <avr/io.h>
 
-void PWM_init(struct PWM_16_bit *pwm, uint16_t *output_register) {
+void PWM_init(struct PWM_16_bit *pwm, unsigned char *output_register) {
     pwm->reg = ouput_register;
     pwm->counter = 0;
     pwm->is_running = false;

@@ -13,7 +13,7 @@ struct PWM_16_bit {
     bool is_running;
 };
 
-void PWM_init(struct PWM_16_bit *pwm, uint16_t *output_register);
+void PWM_init(struct PWM_16_bit *pwm, unsigned char *output_register);
 
 void PWM_set(struct PWM_16_bit *pwm, uint16_t setting);
 uint16_t PWM_get(struct PWM_16_bit *pwm);
