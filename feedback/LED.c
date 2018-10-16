@@ -1,3 +1,7 @@
+// LED.c
+// Hotwire Controller Project
+// Written by Robert Leonard
+
 #include "LED.h"
 
 void LED_init(struct LED, unsigned char *reg, unsigned char position) {
