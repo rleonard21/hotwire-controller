@@ -8,13 +8,16 @@
 #include <avr/io.h>
 
 struct LED {
-    uint16_t *reg;
-    char position;
+    unsigned char *reg;
+    unsigned char position;
 };
+
+void LED_init(struct LED, unsigned char *reg, unsigned char position);
 
 void LED_blink(struct LED, int delay);
 void LED_toggle(struct LED);
-void LED_set(struct LED, bool value);
+void LED_on(struct LED);
+void LED_off(struct LED);
 
 static void LED_delay(uint16_t milliseconds);
 
