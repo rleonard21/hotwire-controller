@@ -8,7 +8,7 @@
 #include <stdint.h>
 
 struct PWM_16_bit {
-    uint16_t *reg;
+    unsigned char *reg;
     uint16_t counter;
     bool is_running;
 };
