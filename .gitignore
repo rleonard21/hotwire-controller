@@ -1,3 +1,6 @@
+*.out
+*.hex
+*.o
 datasheets/
 sensors/*Adafruit*
 layout-diagrams/
