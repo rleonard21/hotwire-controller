@@ -1,6 +1,7 @@
 # Software Task List
 
-### Everything's in C now (no more C++)!
+### ~~Everything's in C now (no more C++)!~~
+### lol jk everything's going baaaaaack to C++ :)
 
 ### Libraries
 * LCD library
