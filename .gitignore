@@ -1,6 +1,13 @@
 *.out
 *.hex
 *.o
+
+.cproject
+.idea/
+.project
+.settings/
+cmake-build-debug/
+
 datasheets/
 sensors/*Adafruit*
 layout-diagrams/
