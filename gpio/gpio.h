@@ -15,7 +15,7 @@
 
 #define OUTPUT_SINK 	0
 #define OUTPUT_SOURCE 	1
-#define INPUT			2
+#define INPUT		2
 #define INPUT_PULLUP 	3
 
 // MODIFIES: Modifies the underlying DDRx port.
