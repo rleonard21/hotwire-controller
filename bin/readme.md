@@ -13,13 +13,15 @@ with the design of the PCB.
 ### outout\_toggle.hex
 * Conditions: Supply power to battery rails of PCB. Connect probes to wire side
 connector. 
-* Expected Result: Circuit should output a square wave with a 100ms width.
+* Expected Result: Circuit should output a square wave with a 100ms width 
+(100.1ms benchmark).
 * Description: The MOSFET output is toggled every 100ms using a busy-wait delay.
 
 ### buzzer.hex
 * Conditions: Supply 5v to MCU in any way. Probe buzzer.
 * Expected Result: Buzzer should output an audible tone at 500Hz at a
-reasonable volume. Probe should indicate 500Hz square wave.
+reasonable volume. Probe should indicate 500Hz square wave
+(497.60 Hz benchmark).
 * Description: Buzzer is supplied a CTC-type PWM signal at 500Hz.
 
 ## To-Do:
