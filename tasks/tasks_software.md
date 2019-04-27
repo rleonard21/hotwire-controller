@@ -1,8 +1,5 @@
 # Software Task List
 
-### ~~Everything's in C now (no more C++)!~~
-### lol jk everything's going baaaaaack to C++ :)
-
 ### Libraries
 * LCD library
 * Port INA219 library to C
@@ -10,10 +7,10 @@
 
 ## Code
 ### Overview
-* PWM functionality (maybe `<avr>` has something?)
-* Rotary encoder functionality with interrupts
-* PID controller code to handle power output
-* Makefile... learn how do it
+* Move all of the `PWM/` code to `Hotwire.c`, basically just renaming the interface
+* Write demo code for the LCD
+* Write demo code for the rotary encoder with menus
+* Tie all that together to make a basic POC
 
 ### Hotwire.c
 ### INA219.c

@@ -1,26 +1,15 @@
 # Hardware Task List
+* Machine the aluminum enclosure
+* Solder the XT60 connector
 
-* LED for blinking purposes
-    * Will help with debugging the AVR
-    * Put on an empty port probably
-    * Place near an edge on the board
-
-
-* ISCP headers
-    * Best if at right angle and exposed towards left/right
-    * Could also work vertically if enough space on circuit
-
-
-* Temperature sensor
-    * Figure out if it's necessary
-    * Determine how it mounts (separate PCB?)
-    * Figure out the wiring harness and connector
-
-
-## Hardware Design
-* Model the XT60 pads in Eagle
-* Pick LED SMD size and put into schematic/board
-* Double check the dimensions of the board fit the enclosure
-* Double check the LCD
-* Do a good job determining component placement, starting with physical limitations
-* Route the traces
+## Modifications for v1.1
+* Use a standard AC/DC adapter and DC barrel jack instead of a battery and XT60
+* Correct the width of the board for the enclosure
+* Fix the LCD voltage divider...
+* Increase the isolate on the pours
+* Leave unused ATMega pins unconnected (use internal pullups instead)
+* Reassign all PWM pins to make actual sense...
+* Put the LCD backlight on a PWM pin for an adjustable backlight
+* Move the buzzer to the right to make mounting the heatsink easier
+* Maybe move to a different clock source (crystal can is bulky and exprensive)
+* Make the ground plane more directed for the return path on the MOSFET
