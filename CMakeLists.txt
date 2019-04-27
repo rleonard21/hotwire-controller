@@ -33,4 +33,7 @@ include_directories(lcd)
 include_directories(pwm)
 include_directories(sensors)
 
-add_executable(main main.c Hotwire.c Hotwire.h)
+add_executable(main main.c
+        Hotwire.h Hotwire.c
+        feedback/Buzzer.h feedback/Buzzer.c
+        )

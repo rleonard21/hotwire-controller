@@ -4,7 +4,7 @@ CFLAGS=-g -Os -Wall -mcall-prologues -mmcu=atmega$(MEGA)
 OBJ2HEX=/usr/bin/avr-objcopy 
 PROG=/usr/bin/avrdude
 TARGET=binary
-FILES=main.c Hotwire.c
+FILES=main.c Hotwire.c feedback/Buzzer.c
 
 build: 
 	# compile the source files
