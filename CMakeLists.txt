@@ -1,8 +1,11 @@
 cmake_minimum_required(VERSION 3.12)
 
-project(hpa_fcu)
+project(hotwire-controller-v1.1)
 
 set(CMAKE_C_STANDARD 99)
+
+SET(CMAKE_C_COMPILER /usr/local/bin/avr-gcc)
+SET(CMAKE_CXX_COMPILER /usr/local/bin/avr-g++)
 
 # Define some constants
 set(AVR_MCU "atmega328p")
@@ -14,6 +17,7 @@ add_definitions("-mmcu=${AVR_MCU}")
 add_definitions("-DF_CPU=${AVR_SPEED}")
 add_definitions("-O${AVR_OPT}")
 add_definitions("-pedantic")
+
 add_definitions("-Wall")
 add_definitions("-Werror")
 
