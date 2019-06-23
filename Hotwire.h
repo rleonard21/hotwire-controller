@@ -11,7 +11,7 @@
 void Hotwire_init();
 
 // EFFECTS: sets the PWM pulse width
-void Hotwire_set(uint8_t value);
+void Hotwire_set(uint16_t value);
 
 // EFFECTS: starts PWM signal on the hotwire output
 // Note:	value=0 -> min duty cycle, value=255 -> max duty cycle
@@ -21,6 +21,6 @@ void Hotwire_start();
 void Hotwire_stop();
 
 // EFFECTS: returns true if the hotwire is running
-uint8_t is_hotwire_running();
+uint16_t is_hotwire_running();
 
 #endif
