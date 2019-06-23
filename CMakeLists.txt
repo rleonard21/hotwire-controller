@@ -40,4 +40,4 @@ include_directories(sensors)
 add_executable(main main.c
         Hotwire.h Hotwire.c
         feedback/Buzzer.h feedback/Buzzer.c
-        )
+        encoder/Encoder.c encoder/Encoder.h)
