@@ -14,11 +14,15 @@ void Buzzer_init();
 // REQUIRES: 0 <= note <= 6
 // Modifies: Modifies the output compare register and the underlying PORTx.
 // EFFECTS:	 Makes the buzzer play a note according to the scale.
-//			 Duration is the time to play the note, in 0.1 second increments
+//			 Duration is the time to play the note, in 0.01 second increments
 void Buzzer_play(int note, unsigned int duration);
 
 // MODIFIES: Modifies the timer registers and the underlying PORTx.
 // EFFECTS:  Makes the buzzer stop playing a note.
 void Buzzer_stop();
+
+// MODIFIES: Modifies the timer registers and the underlying PORTx.
+// EFFECTS:  Returns 1 if the buzzer is playing a note
+uint8_t Buzzer_is_playing();
 
 #endif
