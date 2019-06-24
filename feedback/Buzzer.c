@@ -11,42 +11,50 @@
 volatile unsigned int num_buzzer_interrupts = 0;
 volatile unsigned int max_buzzer_interrupts = 0;
 
-// MODIFIES: Modifies the timer registers.
-//			 Modifies the underlying PORTx.
-// EFFECTS:  Creates a buzzer using timer 1 on pin 5.
+// EFFECTS: The D-Minor blues scale :)
+static const uint16_t scale[] = {426, 358, 319, 301, 284, 239, 213};
+
+// EFFECTS: The number of interrupts to play a note for 0.1 seconds
+// TODO: calculate these values
+static const uint16_t buzzer_duration[] = {0, 0, 0, 0, 0, 0, 0};
+
+// MODIFIES: Modifies the timer registers and underlying PORTx.
+// EFFECTS:  Initializes the buzzer.
 void Buzzer_init() {
-	DDRD |= _BV(PORTD5); // set PORTD5 to an output
-	TCNT1 = 0x00;   // clear the counter
+	DDRD |= _BV(PORTD3);  // set the buzzer to an output
+	TCNT2 = 0;            // clear the counter
 }
 
 // REQUIRES: 0 <= note <= 6
 // Modifies: Modifies the output compare register and the underlying PORTx.
 // EFFECTS:	 Makes the buzzer play a note according to the scale.
+//			 Duration is the time to play the note, in 0.1 second increments
 void Buzzer_play(int note, unsigned int duration) {
-	// set up the timer for CTC mode, prescaler = 64
-	TCCR1B |= _BV(WGM12) | _BV(CS11) | _BV(CS10);
-	TIMSK1 |= _BV(OCIE1A);  // enable the compare interrupt
-	OCR1A = scale[note];	// set the note to be played
-	max_buzzer_interrupts = duration;
+	TCCR2A |= _BV(WGM21);   // set up the timer for CTC mode
+	TCCR2B |= _BV(CS22);    // set the timer prescaler=64
+	TIMSK2 |= _BV(OCIE2B);  // enable the compare interrupt
+
+	OCR2B = scale[note];	// set the note to be played
+	max_buzzer_interrupts = buzzer_duration[note] * duration;
 }
 
-// MODIFIES: Modifies the timer registers. Disables
+// MODIFIES: Modifies the timer registers.
 // EFFECTS:  Makes the buzzer stop playing a note.
 void Buzzer_stop() {
-	TCCR1B &= 0xf8;		// disable the timer
-	TCCR1A = 0x00;		// disconnect the output pin
-	TCNT1 = 0;			// clear the counter
-	PORTD &= ~_BV(PORTD5);	// clear the pin
+	TCCR2B &= ~_BV(CS22);   // disable the timer (prescaler=0)
+	PORTD &= ~_BV(PORTD3);	// clear the buzzer pin
+	TCNT2 = 0;			    // clear the counter
+
 	num_buzzer_interrupts = 0;
 }
 
 // MODIFIES: Modifies the underlying PORTx.
-// EFFECTS:  Toggles PORTD5.
+// EFFECTS:  Toggles the buzzer.
 ISR(TIMER1_COMPA_vect) {
 	if(num_buzzer_interrupts >= max_buzzer_interrupts) {
 		Buzzer_stop();
 	} else {
-		PORTD ^= _BV(PORTD5);
+		PORTD ^= _BV(PORTD3);
 		num_buzzer_interrupts++;
 	}
 }

@@ -15,10 +15,10 @@ void Encoder_init() {
 
 // EFFECTS: returns the state of the rotary encoder. handles debouncing.
 uint8_t Encoder_rotary_read() {
-
+	return ROT_NONE;
 }
 
 // EFFECTS: returns the state of the encoder's switch. handles debouncing.
 uint8_t Encoder_switch_read() {
-
+	return SW_HIGH;
 }

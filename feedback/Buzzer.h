@@ -7,19 +7,14 @@
 
 #include <stdint.h>
 
-// The D-Minor blues scale :)
-static const uint16_t scale[] = {426, 358, 319, 301, 284, 239, 213};
-
-
-
-// MODIFIES: Modifies the timer registers.
-//			 Modifies the underlying PORTx.
-// EFFECTS:  Creates a buzzer using timer 1 on pin 5.
+// MODIFIES: Modifies the timer registers and underlying PORTx.
+// EFFECTS:  Initializes the buzzer.
 void Buzzer_init();
 
 // REQUIRES: 0 <= note <= 6
 // Modifies: Modifies the output compare register and the underlying PORTx.
 // EFFECTS:	 Makes the buzzer play a note according to the scale.
+//			 Duration is the time to play the note, in 0.1 second increments
 void Buzzer_play(int note, unsigned int duration);
 
 // MODIFIES: Modifies the timer registers and the underlying PORTx.
