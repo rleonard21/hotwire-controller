@@ -7,17 +7,16 @@
 
 #include <stdint.h>
 #include <avr/io.h>
-#include <avr/interrupt.h>
 
 // EFFECTS: Initializes PWM output for dimming the LCD backlight/contrast
 void LCDControl_init() {
 	// Setup OC0A/B for output
 	DDRD |= _BV(PORTD5) | _BV(PORTD6);
 
-	// Setup OC0A and OC0B for hardware toggle, non-inverting mode
+	// Setup OC0A/B for hardware toggle, non-inverting mode
 	TCCR0A |= _BV(COM0A1) | _BV(COM0B1);
 
-	// Setup the wage generator for fast PWM, OCR0A top
+	// Setup the wave generator for fast PWM, 0xFF top
 	TCCR0A |= _BV(WGM01) | _BV(WGM00);
 
 	// Setup the clock for no prescaler
