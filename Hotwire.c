@@ -21,7 +21,7 @@ void Hotwire_init() {
 	TCCR1B |= _BV(WGM13) | _BV(WGM12);
 
 	// Set TOP to 256, modelling an 8-bit timer. Max frequency @ 62.5kHz
-	ICR1 = 0x00FF;
+	ICR1 = HOTWIRE_PWM_MAX;
 
 	// Set OCR1B such that the PWM is constantly zero until Hotwire_set()
 	OCR1B = ICR1;
