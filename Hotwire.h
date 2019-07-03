@@ -20,6 +20,9 @@ void Hotwire_start();
 // EFFECTS: stops the PWM signal on the hotwire output
 void Hotwire_stop();
 
+// EFFECTS: sets the TOP overflow value for PWM, larger TOP means lower frequency
+void Hotwire_set_top(uint16_t value);
+
 // EFFECTS: returns true if the hotwire is running
 uint16_t is_hotwire_running();
 
