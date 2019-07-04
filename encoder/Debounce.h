@@ -3,6 +3,7 @@
 //
 // An implementation of the Ganssle debounce routine.
 // http://www.ganssle.com/debouncing-pt2.htm
+// https://hackaday.com/2015/12/10/embed-with-elliot-debounce-your-noisy-buttons-part-ii/
 //
 
 #ifndef HOTWIRE_CONTROLLER_V1_1_DEBOUNCE_H

@@ -3,12 +3,12 @@
 //
 // An implementation of the Ganssle debounce routine.
 // http://www.ganssle.com/debouncing-pt2.htm
+// https://hackaday.com/2015/12/10/embed-with-elliot-debounce-your-noisy-buttons-part-ii/
 //
 
 #include "Debounce.h"
 
 #include <avr/interrupt.h>
-#include <stddef.h>
 
 #define NUM_INPUTS 3
 
@@ -36,22 +36,22 @@ void Debounce_update_service() {
 
 // EFFECTS: returns true if the button is in a high state
 uint8_t Debounce_is_high(uint8_t button) {
-	return inputs[button].history == 0xFF;
+	return inputs[button].history == 0xFF; // checks for bit sequence 0b11111111
 }
 
 // EFFECTS: returns true if the button is in a low state
 uint8_t Debounce_is_low(uint8_t button) {
-	return inputs[button].history == 0x00;
+	return inputs[button].history == 0x00; // checks for bit sequence 0b00000000
 }
 
 // EFFECTS: returns true if the button was just pressed (state has changed)
 uint8_t Debounce_is_pressed(uint8_t button) {
-	return inputs[button].history == 0x7F;
+	return inputs[button].history == 0x7F; // checks for bit sequence 0b01111111
 }
 
 // EFFECTS: returns true if the button was just released (state has changed)
 uint8_t Debounce_is_released(uint8_t button) {
-	return inputs[button].history == 0x80;
+	return inputs[button].history == 0x80; // checks for bit sequence 0b10000000
 }
 
 // EFFECTS: reads the current state of the button
