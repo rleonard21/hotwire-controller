@@ -43,7 +43,22 @@ uint8_t Encoder_rotary_read() {
 	return ROTATE_NONE;
 }
 
-// EFFECTS: returns the state of the encoder's switch. handles debouncing.
-uint8_t Encoder_switch_read() {
+// EFFECTS: returns true if the button was just pressed
+uint8_t Encoder_switch_is_pressed() {
 	return Debounce_is_pressed(SWITCH);
+}
+
+// EFFECTS: returns true if the button was just released
+uint8_t Encoder_switch_is_released() {
+	return Debounce_is_released(SWITCH);
+}
+
+// EFFECTS: returns true if the button is being held low
+uint8_t Encoder_switch_is_low() {
+	return Debounce_is_low(SWITCH);
+}
+
+// EFFECTS: returns true if the button is being held high
+uint8_t Encoder_switch_is_high() {
+	return Debounce_is_high(SWITCH);
 }

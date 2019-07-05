@@ -20,7 +20,16 @@ void Encoder_init();
 // EFFECTS: returns the state of the rotary encoder. handles debouncing.
 uint8_t Encoder_rotary_read();
 
-// EFFECTS: returns the state of the encoder's switch. handles debouncing.
-uint8_t Encoder_switch_read();
+// EFFECTS: returns true if the button was just pressed
+uint8_t Encoder_switch_is_pressed();
+
+// EFFECTS: returns true if the button was just released
+uint8_t Encoder_switch_is_released();
+
+// EFFECTS: returns true if the button is being held low
+uint8_t Encoder_switch_is_low();
+
+// EFFECTS: returns true if the button is being held high
+uint8_t Encoder_switch_is_high();
 
 #endif //HOTWIRE_CONTROLLER_V1_1_ENCODER_H
