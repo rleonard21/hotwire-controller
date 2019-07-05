@@ -13,7 +13,7 @@
 #define NUM_INPUTS 3
 
 volatile int num_ticks = 0;
-volatile int max_ticks = 50;
+volatile int max_ticks = 10;
 
 struct Button inputs[NUM_INPUTS];
 
