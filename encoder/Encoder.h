@@ -7,9 +7,9 @@
 
 #include <stdint.h>
 
-#define ROT_NONE		0
-#define ROT_LEFT		1
-#define ROT_RIGHT		2
+#define ROTATE_NONE		0
+#define ROTATE_LEFT		1
+#define ROTATE_RIGHT    2
 
 #define SW_LOW			0
 #define SW_HIGH			1
