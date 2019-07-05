@@ -26,6 +26,6 @@ void Hotwire_stop();
 void Hotwire_set_top(uint16_t value);
 
 // EFFECTS: returns true if the hotwire is running
-uint16_t is_hotwire_running();
+uint16_t Hotwire_is_running();
 
 #endif

@@ -38,6 +38,7 @@ include_directories(pwm)
 include_directories(sensors)
 
 add_executable(main main.c
-        Hotwire.h Hotwire.c
-        feedback/Buzzer.h feedback/Buzzer.c
-        encoder/Encoder.c encoder/Encoder.h)
+        hotwire/Hotwire.h hotwire/Hotwire.c
+        feedback/Buzzer.c   feedback/Buzzer.h
+        encoder/Encoder.c   encoder/Encoder.h
+        lcd/LCDControl.c    lcd/LCDControl.h encoder/Debounce.c encoder/Debounce.h lcd/ViewController.c lcd/ViewController.h lcd/StringUtility.c lcd/StringUtility.h Interface.c Interface.h)
