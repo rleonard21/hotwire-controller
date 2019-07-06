@@ -16,8 +16,8 @@ void LCDControl_init() {
 	// Setup OC0A/B for output
 	DDRD |= _BV(PORTD5) | _BV(PORTD6);
 
-	// Setup OC0A/B for hardware toggle, non-inverting mode
-	TCCR0A |= _BV(COM0A1) | _BV(COM0B1);
+	// Setup OC0A/B for hardware toggle. OC0A inverting, OC0B non-inverting
+	TCCR0A |= _BV(COM0A1) | _BV(COM0A0) | _BV(COM0B1);
 
 	// Setup the wave generator for fast PWM, 0xFF top
 	TCCR0A |= _BV(WGM01) | _BV(WGM00);
