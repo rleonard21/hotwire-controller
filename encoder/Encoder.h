@@ -32,4 +32,7 @@ uint8_t Encoder_switch_is_low();
 // EFFECTS: returns true if the button is being held high
 uint8_t Encoder_switch_is_high();
 
+// EFFECTS: returns true if the button is held for at least timer long
+uint8_t Encoder_switch_is_held(uint32_t timer_min);
+
 #endif //HOTWIRE_CONTROLLER_V1_1_ENCODER_H

@@ -8,6 +8,9 @@
 #include <stdint.h>
 #include <avr/io.h>
 
+#define OCR_CONTRAST    OCR0A
+#define OCR_BACKLIGHT   OCR0B
+
 // EFFECTS: Initializes PWM output for dimming the LCD backlight/contrast
 void LCDControl_init() {
 	// Setup OC0A/B for output
@@ -25,10 +28,38 @@ void LCDControl_init() {
 
 // EFFECTS: Sets the LCD contrast to the given value (255 => max contrast)
 void LCDControl_set_contrast(uint8_t value) {
-	OCR0A = value;
+	OCR_CONTRAST = value;
 }
 
 // EFFECTS: Sets the LCD backlight brightness to the given value (255 => max brightness)
 void LCDControl_set_backlight(uint8_t value) {
-	OCR0B = value;
+	OCR_BACKLIGHT = value;
+}
+
+// EFFECTS: increments the contrast
+void LCDControl_increment_contrast() {
+	if(OCR_CONTRAST < 0xFF) {
+		OCR_CONTRAST++;
+	}
+}
+
+// EFFECTS: decrements the contrast
+void LCDControl_decrement_contrast() {
+	if(OCR_CONTRAST > 0) {
+		OCR_CONTRAST--;
+	}
+}
+
+// EFFECTS: increments the backlight
+void LCDControl_increment_backlight() {
+	if(OCR_BACKLIGHT < 0xFF) {
+		OCR_CONTRAST++;
+	}
+}
+
+// EFFECTS: decrements the backlight
+void LCDControl_decrement_backlight() {
+	if(OCR_BACKLIGHT > 0) {
+		OCR_CONTRAST--;
+	}
 }

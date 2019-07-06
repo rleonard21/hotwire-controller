@@ -17,7 +17,7 @@ void Hotwire_init() {
 	DDRB |= _BV(PORTB2);
 
 	// Enable inverting fast PWM, ICR TOP, with hardware toggle for OC1B
-	TCCR1A |= _BV(COM1B1) | _BV(COM1B0) | _BV(WGM11);
+	TCCR1A |= _BV(COM1B1) | _BV(WGM11);
 	TCCR1B |= _BV(WGM13) | _BV(WGM12);
 
 	// Set TOP to 256, modelling an 8-bit timer. Max frequency @ 62.5kHz
@@ -47,6 +47,20 @@ void Hotwire_stop() {
 // EFFECTS: sets the TOP overflow value for PWM, larger TOP means lower frequency
 void Hotwire_set_top(uint16_t value) {
 	ICR1 = value;
+}
+
+// EFFECTS: increments the PWM pulse width
+void Hotwire_set_increment() {
+	if(OCR1B < ICR1) {
+		OCR1B++;
+	}
+}
+
+// EFFECTS: decrements the PWM pulse width
+void Hotwire_set_decrement() {
+	if(OCR1B > 0) {
+		OCR1B--;
+	}
 }
 
 // EFFECTS: returns true if the hotwire is running

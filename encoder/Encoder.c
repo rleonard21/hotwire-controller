@@ -62,3 +62,18 @@ uint8_t Encoder_switch_is_low() {
 uint8_t Encoder_switch_is_high() {
 	return Debounce_is_high(SWITCH);
 }
+
+// EFFECTS: returns true if the button is held for at least timer long
+uint8_t Encoder_switch_is_held(uint32_t timer_min) {
+	uint32_t timer = 0;
+
+	while (Debounce_is_pressed(SWITCH) || Debounce_is_high(SWITCH)) {
+		timer++;
+
+		if(timer > timer_min) {
+			return 1;
+		}
+	}
+
+	return 0;
+}
