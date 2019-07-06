@@ -67,7 +67,7 @@ uint8_t Encoder_switch_is_high() {
 uint8_t Encoder_switch_is_held(uint32_t timer_min) {
 	uint32_t timer = 0;
 
-	while (Debounce_is_pressed(SWITCH) || Debounce_is_high(SWITCH)) {
+	while (!Debounce_is_released(SWITCH)) {
 		timer++;
 
 		if(timer > timer_min) {
