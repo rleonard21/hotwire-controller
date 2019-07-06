@@ -53,13 +53,13 @@ void LCDControl_decrement_contrast() {
 // EFFECTS: increments the backlight
 void LCDControl_increment_backlight() {
 	if(OCR_BACKLIGHT < 0xFF) {
-		OCR_CONTRAST++;
+		OCR_BACKLIGHT++;
 	}
 }
 
 // EFFECTS: decrements the backlight
 void LCDControl_decrement_backlight() {
 	if(OCR_BACKLIGHT > 0) {
-		OCR_CONTRAST--;
+		OCR_BACKLIGHT--;
 	}
 }
