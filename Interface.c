@@ -2,7 +2,6 @@
 // Created by Robert Leonard on 2019-07-04.
 //
 
-#include <stddef.h>
 #include "Interface.h"
 
 #include "lcd/ViewController.h"
@@ -16,7 +15,7 @@
 #define SWITCH_HOLD_TIME 200000
 
 // EFFECTS: handles the main menu
-uint8_t Interface_main_hotwire_off(uint8_t next_view) {
+uint8_t Interface_main_hotwire_off() {
 	/* TODO:
 	 *  * display the status and prompt (START/STOP)
 	 *  * display the voltage
@@ -74,7 +73,7 @@ uint8_t Interface_main_hotwire_off(uint8_t next_view) {
 }
 
 // EFFECTS: handles the main settings page
-uint8_t Interface_settings_main(uint8_t next_view) {
+uint8_t Interface_settings_main() {
 	VC_page_incomplete();
 
 	if (Encoder_switch_is_pressed()) {
@@ -85,7 +84,7 @@ uint8_t Interface_settings_main(uint8_t next_view) {
 }
 
 // EFFECTS: handles the LCD settings page
-uint8_t Interface_settings_lcd(uint8_t next_view) {
+uint8_t Interface_settings_lcd() {
 	struct Cursor cursor = {0, 0};
 
 	VC_settings_lcd(cursor);
