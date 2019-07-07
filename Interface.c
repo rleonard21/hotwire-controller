@@ -28,43 +28,49 @@ uint8_t Interface_main_hotwire_off() {
 	// Display the main menu
 	// TODO: remain (1,1) with voltage and duty cycle...
 
-	struct Cursor cursor = {0, 0};
+	struct Cursor cursor = {0, 0, LCD_INVERTED_LEFT_ARROW};
 
-	Hotwire_set(100);
-
-	lcd_command(LCD_DISP_ON_BLINK);
 	VC_main_menu(cursor, 1, 1);
 
 	while (1) {
 		if (Encoder_rotary_read() == ROTATE_RIGHT) {
 			cursor.y = 1;
-			lcd_gotoxy(cursor.x, cursor.y);
+			cursor.direction = LCD_INVERTED_RIGHT_ARROW;
+			VC_set_cursor(cursor);
 		}
 
 		if (Encoder_rotary_read() == ROTATE_LEFT) {
 			cursor.y = 0;
-			lcd_gotoxy(cursor.x, cursor.y);
+			cursor.direction = LCD_INVERTED_LEFT_ARROW;
+			VC_set_cursor(cursor);
 		}
 
 		if (Encoder_switch_is_pressed()) {
+			// Start the hotwire if the button is held
 			if (Encoder_switch_is_held(SWITCH_HOLD_TIME)) {
 				Hotwire_start();
 				Buzzer_play(6, 50);
 				return VIEW_MAIN_RUNNING;
 			}
 
+			// If the button wasn't held, then either edit the PWM or go to settings
 			if (cursor.y) {
+				VC_set_cursor_blink(cursor);
+
 				while (!Encoder_switch_is_high()) {
 					if (Encoder_rotary_read() == ROTATE_RIGHT) {
-						Hotwire_set_increment();
+						Hotwire_increment();
 						VC_main_menu(cursor, 1, 1);
 					}
 
 					if (Encoder_rotary_read() == ROTATE_LEFT) {
-						Hotwire_set_decrement();
+						Hotwire_decrement();
 						VC_main_menu(cursor, 1, 1);
 					}
 				}
+
+				VC_stop_cursor_blink();
+
 			} else {
 				return VIEW_SETTINGS_MAIN;
 			}
@@ -74,9 +80,7 @@ uint8_t Interface_main_hotwire_off() {
 
 // EFFECTS: handles the main menu when the hotwire is on
 uint8_t Interface_main_hotwire_on() {
-	struct Cursor cursor = {0, 0};
-
-	// TODO: disable the cursor for this page
+	struct Cursor cursor = {0, 0, LCD_NO_CURSOR};
 
 	VC_hotwire_running(cursor);
 
@@ -88,12 +92,12 @@ uint8_t Interface_main_hotwire_on() {
 		}
 
 		if(Encoder_rotary_read() == ROTATE_RIGHT) {
-			Hotwire_set_increment();
+			Hotwire_increment();
 			VC_hotwire_running(cursor);
 		}
 
 		if(Encoder_rotary_read() == ROTATE_LEFT) {
-			Hotwire_set_decrement();
+			Hotwire_decrement();
 			VC_hotwire_running(cursor);
 		}
 	}
@@ -101,70 +105,72 @@ uint8_t Interface_main_hotwire_on() {
 
 // EFFECTS: handles the main settings page
 uint8_t Interface_settings_main() {
-	struct Cursor cursor = {0, 0};
+	struct Cursor cursor = {0, 0, LCD_INVERTED_LEFT_ARROW};
 
-	uint8_t settings_page = 0;
 	uint8_t setting_number = 0;
 
-	VC_settings_main(cursor, settings_page);
+	VC_settings_main(cursor, setting_number);
 
 	while(1) {
 		if (Encoder_switch_is_pressed()) {
 			switch(setting_number) {
-				case 0:
-					return VIEW_MAIN_STOPPED;
+				case 0: return VIEW_MAIN_STOPPED;
 
-				case 1:
-					return VIEW_SETTINGS_LCD;
+				case 1: return VIEW_SETTINGS_LCD;
 
-				case 2:
-					return VIEW_SETTINGS_PWM;
+				case 2: return VIEW_SETTINGS_PWM;
 
-				case 3:
-					return VIEW_MAIN_STOPPED;
+				case 3: return VIEW_MAIN_STOPPED;
 			}
 		}
 
 		if(Encoder_rotary_read() == ROTATE_LEFT) {
 			if(setting_number > 0) setting_number--;
-			if(settings_page > 0) settings_page--;
 
-			VC_settings_main(cursor, settings_page);
+			if(!setting_number) cursor.direction = LCD_INVERTED_LEFT_ARROW;
+
+			VC_settings_main(cursor, setting_number);
 		}
 
 		if(Encoder_rotary_read() == ROTATE_RIGHT) {
 			if(setting_number < NUM_SETTINGS) setting_number++;
-			if(settings_page < NUM_SETTINGS) settings_page++;
 
-			VC_settings_main(cursor, settings_page);
+			if(setting_number) cursor.direction = LCD_INVERTED_RIGHT_ARROW;
+
+			VC_settings_main(cursor, setting_number);
 		}
  	}
 }
 
 // EFFECTS: handles the LCD settings page
 uint8_t Interface_settings_lcd() {
-	struct Cursor cursor = {0, 0};
+	struct Cursor cursor = {0, 0, LCD_INVERTED_LEFT_ARROW};
 
 	VC_settings_lcd(cursor);
 
 	while(1) {
-		// Handle moving the LCD selection cursor
+		// Handle moving the LCD selection cursor and direction arrow
 		if(Encoder_rotary_read() == ROTATE_LEFT) {
-			if(cursor.x && cursor.y)
+			if(cursor.x == 12 && cursor.y == 1) {
 				cursor.y--;
-			else if(cursor.x == 12 && cursor.y == 0)
-				cursor.x -= 12;
 
-			lcd_gotoxy(cursor.x, cursor.y);
+			} else if(cursor.x == 12 && cursor.y == 0) {
+				cursor.x -= 12;
+				cursor.direction = LCD_INVERTED_LEFT_ARROW;
+			}
+
+			VC_set_cursor(cursor);
 			while(Encoder_rotary_read() != ROTATE_NONE);
 
 		} else if(Encoder_rotary_read() == ROTATE_RIGHT) {
-			if(!cursor.x && !cursor.y)
+			if(cursor.x == 0 && cursor.y == 0) {
 				cursor.x += 12;
-			else if(cursor.x && !cursor.y)
+				cursor.direction = LCD_INVERTED_RIGHT_ARROW;
+			} else if(cursor.x == 12 && cursor.y == 0) {
 				cursor.y++;
+			}
 
-			lcd_gotoxy(cursor.x, cursor.y);
+			VC_set_cursor(cursor);
 			while(Encoder_rotary_read() != ROTATE_NONE);
 		}
 
@@ -177,6 +183,9 @@ uint8_t Interface_settings_lcd() {
 
 			// Wait for encoder to be released
 			while(!Encoder_switch_is_released());
+
+			// Start blinking the cursor to tell which value is being edited
+			VC_set_cursor_blink(cursor);
 
 			// Edit the LCD values until the encoder button is pressed
 			while(!Encoder_switch_is_high()) {
@@ -194,11 +203,15 @@ uint8_t Interface_settings_lcd() {
 					VC_settings_lcd(cursor);
 				}
 			}
+
+			// Stop blinking after editing
+			VC_stop_cursor_blink();
 		}
 	}
 }
 
 // EFFECTS: handles the PWM settings page
+// TODO:    implement this function
 uint8_t Interface_settings_pwm() {
 	struct Cursor cursor = {0, 0};
 	VC_settings_pwm(cursor);

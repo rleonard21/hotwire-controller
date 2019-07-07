@@ -16,11 +16,8 @@
 #include "feedback/Buzzer.h"
 #include "Interface.h"
 
-
 int main(void) {
 	sei();
-
-	Hotwire_init();
 
 	LCDControl_init();
 	LCDControl_set_contrast(200);
@@ -28,10 +25,14 @@ int main(void) {
 
 	lcd_init(LCD_DISP_ON);
 	lcd_clrscr();
+
+	VC_init();
 	VC_startup_screen();
 
-	Buzzer_init();
+	Hotwire_init();
 	Encoder_init();
+	Buzzer_init();
+
 
 	/* TODO:
 	 *  * INA219 init
@@ -41,8 +42,8 @@ int main(void) {
 
 	uint8_t next_view = VIEW_MAIN_STOPPED;
 
-	while(1) {
-		switch(next_view) {
+	while (1) {
+		switch (next_view) {
 			case VIEW_MAIN_STOPPED: {
 				next_view = Interface_main_hotwire_off();
 				break;
@@ -68,5 +69,5 @@ int main(void) {
 				break;
 			}
 		}
- 	}
+	}
 }

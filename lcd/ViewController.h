@@ -7,12 +7,29 @@
 
 #include <stdint.h>
 
-#define NUM_SETTINGS        2
+#define NUM_SETTINGS                2
+
+#define LCD_INVERTED_LEFT_ARROW     0x00
+#define LCD_INVERTED_RIGHT_ARROW    0x01
+#define LCD_NO_CURSOR               0x09
 
 struct Cursor {
 	uint8_t x;
 	uint8_t y;
+	uint8_t direction;
 };
+
+// EFFECTS: initializes the view controller
+void VC_init();
+
+// EFFECTS: creates a selection cursor at the given coordinate
+void VC_set_cursor(struct Cursor cursor);
+
+// EFFECTS: creates a blinking cursor at the given coordinate
+void VC_set_cursor_blink(struct Cursor cursor);
+
+// EFFECTS: stops the blinking cursor
+void VC_stop_cursor_blink();
 
 // EFFECTS: displays the startup page
 void VC_startup_screen();
