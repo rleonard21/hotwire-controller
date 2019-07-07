@@ -26,10 +26,16 @@ void Hotwire_stop();
 void Hotwire_set_top(uint16_t value);
 
 // EFFECTS: increments the PWM pulse width
-void Hotwire_set_increment();
+void Hotwire_increment();
 
 // EFFECTS: decrements the PWM pulse width
-void Hotwire_set_decrement();
+void Hotwire_decrement();
+
+// EFFECTS: sets the prescaler for the PWM timer
+void Hotwire_set_prescaler(uint8_t index);
+
+// EFFECTS: sets the increment value
+void Hotwire_set_increment(uint8_t value);
 
 // EFFECTS: returns true if the hotwire is running
 uint16_t Hotwire_is_running();

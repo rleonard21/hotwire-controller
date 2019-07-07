@@ -7,9 +7,8 @@
 #include <stdint.h>
 #include <avr/io.h>
 
-// Prescaler used for setting the frequency of the hotwire PWM
-// Currently set for no prescaling
-#define CS_PRESCALER ( (1 << CS10) )
+static uint8_t increment_value = 1;
+static uint8_t CS_PRESCALER = ( (1 << CS00) );
 
 // EFFECTS: initializes the device for PWM on the hotwire output
 void Hotwire_init() {
@@ -50,17 +49,42 @@ void Hotwire_set_top(uint16_t value) {
 }
 
 // EFFECTS: increments the PWM pulse width
-void Hotwire_set_increment() {
+void Hotwire_increment() {
 	if(OCR1B < ICR1) {
-		OCR1B++;
+		OCR1B += increment_value;
 	}
 }
 
 // EFFECTS: decrements the PWM pulse width
-void Hotwire_set_decrement() {
+void Hotwire_decrement() {
 	if(OCR1B > 0) {
-		OCR1B--;
+		OCR1B -= increment_value;
 	}
+}
+
+// EFFECTS: sets the prescaler for the PWM timer
+void Hotwire_set_prescaler(uint8_t index) {
+	switch (index) {
+		case 0: // 1
+			CS_PRESCALER = ( _BV(CS00) );
+
+		case 1: // 8
+			CS_PRESCALER = ( _BV(CS01) );
+
+		case 2: // 64
+			CS_PRESCALER = ( _BV(CS01) | _BV(CS00) );
+
+		case 3: // 256
+			CS_PRESCALER = ( _BV(CS02) );
+
+		case 4: // 1024
+			CS_PRESCALER = ( _BV(CS02) | _BV(CS00) );
+	}
+}
+
+// EFFECTS: sets the increment value
+void Hotwire_set_increment(uint8_t value) {
+	increment_value = value;
 }
 
 // EFFECTS: returns true if the hotwire is running
