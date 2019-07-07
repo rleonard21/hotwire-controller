@@ -15,8 +15,11 @@ void Hotwire_init() {
 	// Enable the PWM pin as an output
 	DDRB |= _BV(PORTB2);
 
-	// Enable inverting fast PWM, ICR TOP, with hardware toggle for OC1B
-	TCCR1A |= _BV(COM1B1) | _BV(WGM11);
+	// Set the output pin low (pin will be connected to compare register later)
+	PORTB &= ~_BV(PORTB2);
+
+	// Enable fast PWM, ICR TOP (hardware toggle setup in start function)
+	TCCR1A |= _BV(WGM11);
 	TCCR1B |= _BV(WGM13) | _BV(WGM12);
 
 	// Set TOP to 256, modelling an 8-bit timer. Max frequency @ 62.5kHz
@@ -40,12 +43,20 @@ uint16_t Hotwire_get() {
 // EFFECTS: starts PWM signal on the hotwire output
 // Note:	Hotwire_set() must be called at least once before starting PWM
 void Hotwire_start() {
+	// Attach the output pin to the compare register
+	TCCR1A |= _BV(COM1B1);
+
+	// Enable the timer
 	TCCR1B |= CS_PRESCALER;
 }
 
 // EFFECTS: stops the PWM signal on the hotwire output
 void Hotwire_stop() {
+	// Disable the timer clock
 	TCCR1B &= ~CS_PRESCALER;
+
+	// Detach the output pin from the compare register
+	TCCR1A &= ~_BV(COM1B1);
 }
 
 // EFFECTS: sets the TOP overflow value for PWM, larger TOP means lower frequency
