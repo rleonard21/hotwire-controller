@@ -32,6 +32,11 @@ void Hotwire_set(uint16_t value) {
 	OCR1B = value;
 }
 
+// EFFECTS: gets the PWM compare value
+uint16_t Hotwire_get() {
+	return OCR1B;
+}
+
 // EFFECTS: starts PWM signal on the hotwire output
 // Note:	Hotwire_set() must be called at least once before starting PWM
 void Hotwire_start() {
@@ -82,9 +87,19 @@ void Hotwire_set_prescaler(uint8_t index) {
 	}
 }
 
+// EFFECTS: gets the prescaler for the PWM timer
+uint8_t Hotwire_get_prescaler() {
+	return CS_PRESCALER;
+}
+
 // EFFECTS: sets the increment value
 void Hotwire_set_increment(uint8_t value) {
 	increment_value = value;
+}
+
+// EFFECTS: gets the increment value
+uint8_t Hotwire_get_increment() {
+	return increment_value;
 }
 
 // EFFECTS: returns true if the hotwire is running

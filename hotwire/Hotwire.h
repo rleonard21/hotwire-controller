@@ -15,6 +15,9 @@ void Hotwire_init();
 // EFFECTS: sets the PWM pulse width
 void Hotwire_set(uint16_t value);
 
+// EFFECTS: gets the PWM compare value
+uint16_t Hotwire_get();
+
 // EFFECTS: starts PWM signal on the hotwire output
 // Note:	value=0 -> min duty cycle, value=255 -> max duty cycle
 void Hotwire_start();
@@ -34,8 +37,14 @@ void Hotwire_decrement();
 // EFFECTS: sets the prescaler for the PWM timer
 void Hotwire_set_prescaler(uint8_t index);
 
+// EFFECTS: gets the prescaler for the PWM timer
+uint8_t Hotwire_get_prescaler();
+
 // EFFECTS: sets the increment value
 void Hotwire_set_increment(uint8_t value);
+
+// EFFECTS: gets the increment value
+uint8_t Hotwire_get_increment();
 
 // EFFECTS: returns true if the hotwire is running
 uint16_t Hotwire_is_running();
