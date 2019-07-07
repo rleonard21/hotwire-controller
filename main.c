@@ -20,8 +20,10 @@
 int main(void) {
 	sei();
 
+	Hotwire_init();
+
 	LCDControl_init();
-	LCDControl_set_contrast(55);
+	LCDControl_set_contrast(200);
 	LCDControl_set_backlight(150);
 
 	lcd_init(LCD_DISP_ON);
@@ -37,12 +39,17 @@ int main(void) {
 
 	_delay_ms(500);
 
-	uint8_t next_view = VIEW_MAIN;
+	uint8_t next_view = VIEW_MAIN_STOPPED;
 
 	while(1) {
 		switch(next_view) {
-			case VIEW_MAIN: {
-				next_view = Interface_main();
+			case VIEW_MAIN_STOPPED: {
+				next_view = Interface_main_hotwire_off();
+				break;
+			}
+
+			case VIEW_MAIN_RUNNING: {
+				next_view = Interface_main_hotwire_on();
 				break;
 			}
 
@@ -53,6 +60,11 @@ int main(void) {
 
 			case VIEW_SETTINGS_LCD: {
 				next_view = Interface_settings_lcd();
+				break;
+			}
+
+			case VIEW_SETTINGS_PWM: {
+				next_view = Interface_settings_pwm();
 				break;
 			}
 		}

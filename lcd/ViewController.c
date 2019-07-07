@@ -45,10 +45,40 @@ void VC_main_menu(struct Cursor cursor, uint8_t power, uint8_t voltage) {
 //	strcpy(next_line_2, "> Duty:      73%\n");
 
 	sprintf(next_line_1, "< READY   12.04v\n");
-	sprintf(next_line_2, "> Duty:     %d\n", OCR1B);
+	sprintf(next_line_2, "> Duty:      %d\n", OCR1B);
 
 	update_lcd();
 	lcd_gotoxy(cursor.x, cursor.y);
+}
+
+// EFFECTS: displays the hotwire page
+void VC_hotwire_running(struct Cursor cursor) {
+	lcd_gotoxy(0, 0);
+
+	sprintf(next_line_1, "RUNNING    23.1W\n");
+	sprintf(next_line_2, "D: %d    11.91v\n", OCR1B);
+
+	update_lcd();
+	lcd_gotoxy(cursor.x, cursor.y);
+}
+
+// EFFECTS: displays the main settings page
+void VC_settings_main(struct Cursor cursor, uint8_t settings_page) {
+	lcd_gotoxy(0, 0);
+
+	const char *settings[] = {
+			"< main menu     \n",
+			"  LCD           \n",
+			"  PWM           \n",
+			"                \n"
+	};
+
+	strcpy(next_line_1, settings[settings_page]);
+	strcpy(next_line_2, settings[settings_page + 1]);
+
+	update_lcd();
+	lcd_gotoxy(cursor.x, cursor.y);
+
 }
 
 // EFFECTS: displays the LCD settings page
@@ -57,6 +87,17 @@ void VC_settings_lcd(struct Cursor cursor) {
 
 	sprintf(next_line_1, "< Bright:   >%d\n", OCR0B);
 	sprintf(next_line_2, "  Contrast: >%d\n", OCR0A);
+
+	update_lcd();
+	lcd_gotoxy(cursor.x, cursor.y);
+}
+
+// EFFECTS: displays the PWM settings page
+void VC_settings_pwm(struct Cursor cursor) {
+	lcd_gotoxy(0, 0);
+
+	sprintf(next_line_1, "< Incr:     >%d\n", 1);
+	sprintf(next_line_2, "  Clk div:  >%d\n", 8);
 
 	update_lcd();
 	lcd_gotoxy(cursor.x, cursor.y);
