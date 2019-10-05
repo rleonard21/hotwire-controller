@@ -9,7 +9,7 @@
 #include <inttypes.h>
 #include <compat/twi.h>
 
-#include <i2cmaster.h>
+#include "i2cmaster.h"
 
 
 /* define CPU frequency in hz here if not defined in Makefile */
@@ -38,7 +38,7 @@ void i2c_init(void)
   Issues a start condition and sends address and transfer direction.
   return 0 = device accessible, 1= failed to access device
 *************************************************************************/
-unsigned char i2c_start(unsigned char address)
+unsigned char i2c_start(unsigned char address, unsigned char rw)
 {
     uint8_t   twst;
 
@@ -53,7 +53,7 @@ unsigned char i2c_start(unsigned char address)
 	if ( (twst != TW_START) && (twst != TW_REP_START)) return 1;
 
 	// send device address
-	TWDR = address;
+	TWDR = (address << 1) + rw;
 	TWCR = (1<<TWINT) | (1<<TWEN);
 
 	// wail until transmission completed and ACK/NACK has been received
@@ -74,7 +74,7 @@ unsigned char i2c_start(unsigned char address)
 
  Input:   address and transfer direction of I2C device
 *************************************************************************/
-void i2c_start_wait(unsigned char address)
+void i2c_start_wait(unsigned char address, unsigned char rw)
 {
     uint8_t   twst;
 
@@ -92,7 +92,7 @@ void i2c_start_wait(unsigned char address)
     	if ( (twst != TW_START) && (twst != TW_REP_START)) continue;
 
     	// send device address
-    	TWDR = address;
+		TWDR = (address << 1) + rw;
     	TWCR = (1<<TWINT) | (1<<TWEN);
 
     	// wail until transmission completed
@@ -125,9 +125,9 @@ void i2c_start_wait(unsigned char address)
  Return:  0 device accessible
           1 failed to access device
 *************************************************************************/
-unsigned char i2c_rep_start(unsigned char address)
+unsigned char i2c_rep_start(unsigned char address, unsigned char rw)
 {
-    return i2c_start( address );
+    return i2c_start(address, rw);
 
 }/* i2c_rep_start */
 
