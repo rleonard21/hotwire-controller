@@ -1,19 +1,3 @@
-/*!
- * This is a library for the Adafruit INA219 breakout board
- * ----> https://www.adafruit.com/products/904
- *
- * Adafruit invests time and resources providing this open source code,
- * please support Adafruit and open-source hardware by purchasing
- * products from Adafruit!
- *
- * Written by Kevin "KTOWN" Townsend for Adafruit Industries.
- *
- * BSD license, all text here must be included in any redistribution.
- *
- * Ported to C for use with standard AVR by Robert Leonard
- * Hotwire Controller Project
- */
-
 #ifndef _INA219_LIB_
 #define _INA219_LIB_
 
@@ -69,16 +53,11 @@
 #define INA219_REG_CURRENT                      (0x04)
 #define INA219_REG_CALIBRATION                  (0x05)
 
-
-struct INA219 {
-    uint8_t addr;
-};
-
-
-void INA219_init(struct INA219 *ina);
-int16_t INA219_getBusVoltage(struct INA219 *ina);
-int16_t INA219_getShuntVoltage(struct INA219 *ina);
-int16_t INA219_getCurrent(struct INA219 *ina);
-int16_t INA219_getPower(struct INA219 *ina);
+void INA219_init();
+float INA219_getBusVoltage();
+float INA219_getShuntVoltage();
+float INA219_getCurrent();
+float INA219_getPower();
+int16_t read_reg(uint8_t reg);
 
 #endif

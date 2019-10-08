@@ -1,11 +1,13 @@
-CC=/usr/local/bin/avr-gcc
+CC=/usr/bin/avr-gcc
 MEGA=328p
-CFLAGS=-g -Os -Wall -mcall-prologues -mmcu=atmega$(MEGA)
-OBJ2HEX=/usr/local/bin/avr-objcopy 
-PROG=/usr/local/bin/avrdude
+CFLAGS=-lm -g -Os -Wall -mcall-prologues -mmcu=atmega$(MEGA)
+OBJ2HEX=/usr/bin/avr-objcopy 
+PROG=/usr/bin/avrdude
 TARGET=binary
-FILES=main.c hotwire/Hotwire.c lcd/lcd.c lcd/LCDControl.c encoder/Debounce.c encoder/Encoder.c feedback/Buzzer.c \
-lcd/ViewController.c Interface.c lcd/StringUtility.c
+FILES=main.c hotwire/Hotwire.c lcd/lcd.c lcd/LCDControl.c \
+		encoder/Debounce.c encoder/Encoder.c feedback/Buzzer.c \
+		lcd/ViewController.c Interface.c lcd/StringUtility.c \
+		sensors/INA219.c i2c/twimaster.c
 
 .DEFAULT_GOAL = build
 

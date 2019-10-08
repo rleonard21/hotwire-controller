@@ -7,14 +7,17 @@
 #include "lcd.h"
 #include "StringUtility.h"
 
+#include "../sensors/INA219.h"
+
 #include <string.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 // EFFECTS: these two arrays will represent lines 1 and 2 of the LCD
-static char current_line_1[] = "................\n";
-static char current_line_2[] = "................\n";
-static char next_line_1[] = "................\n";
-static char next_line_2[] = "................\n";
+static char current_line_1[] = "................\n\n";
+static char current_line_2[] = "................\n\n";
+static char next_line_1[] = "................\n\n";
+static char next_line_2[] = "................\n\n";
 
 // EFFECTS: bit mappings for the inverted left/right arrow custom LCD characters
 static char inverted_left_arrow[] = {0x1D, 0x1B, 0x17, 0x0F, 0x17, 0x1B, 0x1D, 0x1F};
@@ -98,7 +101,7 @@ void VC_startup_screen() {
 void VC_main_menu(struct Cursor cursor, uint8_t power, uint8_t voltage) {
 	lcd_gotoxy(0, 0);
 
-	sprintf(next_line_1, "  READY   12.04v\n");
+	sprintf(next_line_1, "  READY   vvvvvv\n");
 	sprintf(next_line_2, "  Duty:      %d\n", OCR1B);
 
 	update_lcd();
@@ -109,8 +112,15 @@ void VC_main_menu(struct Cursor cursor, uint8_t power, uint8_t voltage) {
 void VC_hotwire_running(struct Cursor cursor) {
 	lcd_gotoxy(0, 0);
 
-	sprintf(next_line_1, "RUNNING    23.1W\n");
-	sprintf(next_line_2, "D: %d    11.91v\n", OCR1B);
+	float volts = INA219_getBusVoltage();
+//	int16_t volts = (read_reg(0x02) >> 3) * 4;
+//	double voltsF = ((float)(volts)) / 1000;
+
+//	sprintf(next_line_1, "RUNNING   %f\n", 1.234);
+	strcpy(next_line_1, "Running    ");
+	dtostrf(volts, 3, 2, next_line_1 + 11);
+
+	sprintf(next_line_2, "\nD: %d    11.91v\n", OCR1B);
 
 	update_lcd();
 //	VC_set_cursor(cursor);
