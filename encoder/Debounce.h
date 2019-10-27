@@ -11,6 +11,9 @@
 
 #include <stdint.h>
 
+volatile int debounce_num_ticks;
+volatile int debounce_max_ticks;
+
 struct Button {
 	volatile uint8_t *port;
 	uint8_t position;

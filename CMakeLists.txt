@@ -48,4 +48,4 @@ add_executable(main main.c
         Interface.c             Interface.h
         lcd/lcd.c               lcd/lcd.h
         i2c/twimaster.c         i2c/i2cmaster.h
-        sensors/INA219.c        sensors/INA219.h)
+        sensors/INA219.c        sensors/INA219.h interrupt/Interrupt.c interrupt/Interrupt.h)

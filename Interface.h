@@ -11,7 +11,6 @@
 #define VIEW_MAIN_RUNNING   1
 #define VIEW_SETTINGS_MAIN  2
 #define VIEW_SETTINGS_LCD   3
-#define VIEW_SETTINGS_PWM   4
 
 // EFFECTS: handles the main menu when the hotwire is off
 uint8_t Interface_main_hotwire_off();
@@ -24,9 +23,6 @@ uint8_t Interface_settings_main();
 
 // EFFECTS: handles the LCD settings page
 uint8_t Interface_settings_lcd();
-
-// EFFECTS: handles the PWM settings page
-uint8_t Interface_settings_pwm();
 
 // TODO:
 //  * add other settings pages

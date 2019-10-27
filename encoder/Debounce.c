@@ -12,10 +12,10 @@
 
 #define NUM_INPUTS 3
 
-volatile int num_ticks = 0;
-volatile int max_ticks = 10;
-
 struct Button inputs[NUM_INPUTS];
+
+volatile int debounce_num_ticks = 0;
+volatile int debounce_max_ticks = 10;
 
 // EFFECTS: starts the debounce service. copies the inputs and enables the overflow interrupt vector.
 void Debounce_init(struct Button *inputs_in) {
@@ -57,12 +57,4 @@ uint8_t Debounce_is_released(uint8_t button) {
 // EFFECTS: reads the current state of the button
 uint8_t Debounce_read(const struct Button *button) {
 	return (*button->port & _BV(button->position)) == 0;
-}
-
-// EFFECTS: runs the update service after a certain number of interrupts
-ISR(TIMER0_OVF_vect) {
-	if(num_ticks++ > max_ticks) {
-		Debounce_update_service();
-		num_ticks = 0;
-	}
 }

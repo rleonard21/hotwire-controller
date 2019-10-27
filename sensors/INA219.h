@@ -53,11 +53,28 @@
 #define INA219_REG_CURRENT                      (0x04)
 #define INA219_REG_CALIBRATION                  (0x05)
 
+volatile int ina219_num_ticks;
+volatile int ina219_max_ticks;
+
+// EFFECTS: Initializes the sensor and I2C bus
 void INA219_init();
+
+// EFFECTS: returns the last bus voltage
 float INA219_getBusVoltage();
+
+// EFFECTS: returns the last shunt voltage
 float INA219_getShuntVoltage();
+
+// EFFECTS: returns the last current
 float INA219_getCurrent();
+
+// EFFECTS: returns the last current
 float INA219_getPower();
+
+// EFFECTS: updates the registers
+void INA219_update_service();
+
+// EFFECTS: reads a register from the I2C bus
 int16_t read_reg(uint8_t reg);
 
 #endif

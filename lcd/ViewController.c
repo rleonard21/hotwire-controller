@@ -13,6 +13,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+volatile uint32_t vc_num_ticks = 0;
+volatile uint32_t vc_max_ticks = 90000;
+
 // EFFECTS: these two arrays will represent lines 1 and 2 of the LCD
 static char current_line_1[] = "................\n\n";
 static char current_line_2[] = "................\n\n";
@@ -24,7 +27,7 @@ static char inverted_left_arrow[] = {0x1D, 0x1B, 0x17, 0x0F, 0x17, 0x1B, 0x1D, 0
 static char inverted_right_arrow[] = {0x17, 0x1B, 0x1D, 0x1E, 0x1D, 0x1B, 0x17, 0x1F};
 
 // EFFECTS: keeps track of the last location the cursor was written to
-static struct Cursor last_cursor = {0, 0};
+static struct VCO last_cursor = {0, 0, 0, NULL};
 
 // EFFECTS: updates the LCD to display lines 1 and 2
 static void update_lcd() {
@@ -55,33 +58,38 @@ void VC_init() {
 	create_custom_char(inverted_left_arrow, LCD_INVERTED_LEFT_ARROW);
 	create_custom_char(inverted_right_arrow, LCD_INVERTED_RIGHT_ARROW);
 
+	VCObject.x = 0;
+	VCObject.y = 0;
+	VCObject.direction = 0;
+	VCObject.NEXT_VC = &VC_startup_screen;
+
 	lcd_gotoxy(0, 0);
 }
 
 // EFFECTS: creates a selection cursor at the given coordinate
-void VC_set_cursor(struct Cursor cursor) {
+void VC_set_cursor() {
 	// Clear the last cursor location
 	lcd_gotoxy(last_cursor.x, last_cursor.y);
 	lcd_putc(' ');
 
-	lcd_gotoxy(cursor.x, cursor.y);
+	lcd_gotoxy(VCObject.x, VCObject.y);
 
 	// Create the new cursor
-	if(cursor.direction) {
+	if(VCObject.direction) {
 		lcd_putc(LCD_INVERTED_RIGHT_ARROW);
 	} else {
 		lcd_putc(LCD_INVERTED_LEFT_ARROW);
 	}
 
-	lcd_gotoxy(cursor.x, cursor.y);
+	lcd_gotoxy(VCObject.x, VCObject.y);
 
-	last_cursor = cursor;
+	last_cursor = VCObject;
 }
 
 // EFFECTS: creates a blinking cursor at the given coordinate
-void VC_set_cursor_blink(struct Cursor cursor) {
+void VC_set_cursor_blink() {
 	lcd_command(LCD_DISP_ON_BLINK);
-	VC_set_cursor(cursor);
+	VC_set_cursor();
 }
 
 // EFFECTS: stops the blinking cursor
@@ -93,47 +101,41 @@ void VC_stop_cursor_blink() {
 void VC_startup_screen() {
 	lcd_gotoxy(0, 0);
 
-	lcd_puts("hotwire v1.1\n");
+	lcd_puts("hotwire v1.1.0\n");
 	lcd_puts("\n");
 }
 
 // EFFECTS: displays the main menu page
-void VC_main_menu(struct Cursor cursor, uint8_t power, uint8_t voltage) {
+void VC_main_menu() {
 	lcd_gotoxy(0, 0);
 
 	sprintf(next_line_1, "  READY   vvvvvv\n");
 	sprintf(next_line_2, "  Duty:      %d\n", OCR1B);
 
 	update_lcd();
-	VC_set_cursor(cursor);
+	VC_set_cursor();
 }
 
 // EFFECTS: displays the hotwire page
-void VC_hotwire_running(struct Cursor cursor) {
+void VC_hotwire_running() {
 	lcd_gotoxy(0, 0);
 
-	float volts = INA219_getBusVoltage();
-//	int16_t volts = (read_reg(0x02) >> 3) * 4;
-//	double voltsF = ((float)(volts)) / 1000;
-
-//	sprintf(next_line_1, "RUNNING   %f\n", 1.234);
 	strcpy(next_line_1, "Running    ");
-	dtostrf(volts, 3, 2, next_line_1 + 11);
+	dtostrf(INA219_getCurrent(), 3, 2, next_line_1 + 11);
+
 
 	sprintf(next_line_2, "\nD: %d    11.91v\n", OCR1B);
 
 	update_lcd();
-//	VC_set_cursor(cursor);
 }
 
 // EFFECTS: displays the main settings page
-void VC_settings_main(struct Cursor cursor, uint8_t settings_page) {
+void VC_settings_main(uint8_t settings_page) {
 	lcd_gotoxy(0, 0);
 
 	const char *settings[] = {
 			"  main menu     \n",
 			"  LCD           \n",
-			"  PWM           \n",
 			"                \n"
 	};
 
@@ -141,30 +143,18 @@ void VC_settings_main(struct Cursor cursor, uint8_t settings_page) {
 	strcpy(next_line_2, settings[settings_page + 1]);
 
 	update_lcd();
-	VC_set_cursor(cursor);
-
+	VC_set_cursor();
 }
 
 // EFFECTS: displays the LCD settings page
-void VC_settings_lcd(struct Cursor cursor) {
+void VC_settings_lcd() {
 	lcd_gotoxy(0, 0);
 
 	sprintf(next_line_1, "  Bright:    %d\n", OCR0B);
 	sprintf(next_line_2, "  Contrast:  %d\n", OCR0A);
 
 	update_lcd();
-	VC_set_cursor(cursor);
-}
-
-// EFFECTS: displays the PWM settings page
-void VC_settings_pwm(struct Cursor cursor) {
-	lcd_gotoxy(0, 0);
-
-	sprintf(next_line_1, "  Incr:      %d\n", 1);
-	sprintf(next_line_2, "  Clk div:   %d\n", 8);
-
-	update_lcd();
-	VC_set_cursor(cursor);
+	VC_set_cursor();
 }
 
 // EFFECTS: prints an error message
@@ -185,4 +175,11 @@ void VC_page_incomplete_2() {
 	strcpy(next_line_2, "...............2\n");
 
 	update_lcd();
+}
+
+// EFFECTS: updates the screen
+void VC_update_service() {
+	if(VCObject.NEXT_VC) {
+		(*VCObject.NEXT_VC)();
+	}
 }
