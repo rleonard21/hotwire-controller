@@ -66,7 +66,7 @@ void INA219_setShuntVoltage() { shunt_voltage =  0; }
 // EFFECTS: sets the current
 void INA219_setCurrent() {
 	int16_t current_raw = read_reg(INA219_REG_CURRENT);
-	current = current_raw * 2.0;
+	current = current_raw * 0.2 / 1000.0;
 }
 
 // EFFECTS: sets the power

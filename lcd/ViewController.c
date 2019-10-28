@@ -8,6 +8,7 @@
 #include "StringUtility.h"
 
 #include "../sensors/INA219.h"
+#include "../hotwire/Hotwire.h"
 
 #include <string.h>
 #include <stdio.h>
@@ -31,13 +32,15 @@ static struct VCO last_cursor = {0, 0, 0, NULL};
 
 // EFFECTS: updates the LCD to display lines 1 and 2
 static void update_lcd() {
-	if (strcmp(current_line_1, next_line_1) ||
-	    strcmp(current_line_2, next_line_2)) {
+	if (strcmp(current_line_1, next_line_1) != 0 ||
+	    strcmp(current_line_2, next_line_2) != 0) {
 
 		strcpy(current_line_1, next_line_1);
 		strcpy(current_line_2, next_line_2);
 
+		lcd_gotoxy(0, 0);
 		lcd_puts(current_line_1);
+		lcd_gotoxy(0, 1);
 		lcd_puts(current_line_2);
 	}
 }
@@ -109,7 +112,10 @@ void VC_startup_screen() {
 void VC_main_menu() {
 	lcd_gotoxy(0, 0);
 
-	sprintf(next_line_1, "  READY   vvvvvv\n");
+	char voltage[10];
+	StringUtility_fixed_float(voltage, INA219_getBusVoltage());
+
+	sprintf(next_line_1, "  READY   %sv\n", voltage);
 	sprintf(next_line_2, "  Duty:      %d\n", OCR1B);
 
 	update_lcd();
@@ -120,11 +126,16 @@ void VC_main_menu() {
 void VC_hotwire_running() {
 	lcd_gotoxy(0, 0);
 
-	strcpy(next_line_1, "Running    ");
-	dtostrf(INA219_getCurrent(), 3, 2, next_line_1 + 11);
+	char voltage[6];
+	char current[6];
+	char powerSetting[6];
 
+	StringUtility_fixed_float(voltage, INA219_getBusVoltage());
+	StringUtility_fixed_float(current, INA219_getCurrent());
+	StringUtility_fixed_float(powerSetting, 22.50);
 
-	sprintf(next_line_2, "\nD: %d    11.91v\n", OCR1B);
+	sprintf(next_line_1, "RUNNING   %sv\n", voltage);
+	sprintf(next_line_2, "(%sw)  %sA\n", powerSetting, current);;
 
 	update_lcd();
 }

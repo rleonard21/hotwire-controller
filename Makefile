@@ -7,7 +7,7 @@ TARGET=binary
 FILES=main.c hotwire/Hotwire.c lcd/lcd.c lcd/LCDControl.c \
 		encoder/Debounce.c encoder/Encoder.c feedback/Buzzer.c \
 		lcd/ViewController.c Interface.c lcd/StringUtility.c \
-		sensors/INA219.c i2c/twimaster.c
+		sensors/INA219.c i2c/twimaster.c interrupt/Interrupt.c
 
 .DEFAULT_GOAL = build
 

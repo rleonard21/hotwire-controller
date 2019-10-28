@@ -7,7 +7,7 @@
 
 #include <stdint.h>
 
-#define HOTWIRE_PWM_MAX 0x0FF
+#define HOTWIRE_PWM_MAX 0xFF
 
 // EFFECTS: initializes the device for PWM on the hotwire output
 void Hotwire_init();
@@ -48,5 +48,8 @@ uint8_t Hotwire_get_increment();
 
 // EFFECTS: returns true if the hotwire is running
 uint16_t Hotwire_is_running();
+
+// EFFECTS: returns the percent duty cycle
+float Hotwire_get_duty();
 
 #endif

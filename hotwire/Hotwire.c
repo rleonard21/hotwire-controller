@@ -26,7 +26,8 @@ void Hotwire_init() {
 	ICR1 = HOTWIRE_PWM_MAX;
 
 	// Set OCR1B such that the PWM is constantly zero until Hotwire_set()
-	OCR1B = ICR1;
+//	OCR1B = ICR1;
+	OCR1B = 30;
 }
 
 // EFFECTS: sets the PWM pulse width to the given value
@@ -116,4 +117,9 @@ uint8_t Hotwire_get_increment() {
 // EFFECTS: returns true if the hotwire is running
 uint16_t Hotwire_is_running() {
 	return (uint16_t) (TCCR1B & CS_PRESCALER);
+}
+
+// EFFECTS: returns the percent duty cycle
+float Hotwire_get_duty() {
+	return (float)(OCR1B) / (float)(HOTWIRE_PWM_MAX) * 100.0;
 }

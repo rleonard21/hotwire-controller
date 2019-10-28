@@ -6,22 +6,18 @@
 
 #include <stdio.h>
 
-// EFFECTS: takes a number and converts to a 3 digit string
-//          adds leading zeros as necessary
-void StringUtility_digit_to_string(char *str, uint8_t number) {
-	char buf[] = "000";
+void StringUtility_fixed_float(char *str, float number) {
+	int n = (int)(number);
+	int n1 = n / 10;
+	int n2 = n - n1 * 10;
 
-	sprintf(buf + 0, "%d", number);
-	return;
+	float f = number - n;
+	int f1 = (int)(f * 10);
+	int f2 = (int)(f * 100 - f1 * 10);
 
-	if(number >= 0 && number <= 9) {
-		// One digit
-		sprintf(buf + 2, "%d", number);
-	} else if(number >= 10 && number <= 99) {
-		// Two digits
-		sprintf(buf + 1, "%d", number);
+	if(n1 == 0) {
+		sprintf(str, " %d.%d%d", n2, f1, f2);
 	} else {
-		// Three digits
-		sprintf(buf + 0, "%d", number);
+		sprintf(str, "%d%d.%d%d", n1, n2, f1, f2);
 	}
 }
