@@ -7,7 +7,7 @@
 
 #include <stdint.h>
 
-#define HOTWIRE_PWM_MAX 0xFF
+#define HOTWIRE_PWM_MAX 0xFFFF
 
 // EFFECTS: initializes the device for PWM on the hotwire output
 void Hotwire_init();
@@ -51,5 +51,14 @@ uint16_t Hotwire_is_running();
 
 // EFFECTS: returns the percent duty cycle
 float Hotwire_get_duty();
+
+// EFFECTS: returns the power setting
+float Hotwire_get_power();
+
+// EFFECTS: increments/decrements power setting
+void Hotwire_add_power_setting(float setting);
+
+// EFFECTS: takes the PID controller's output as input, changes timer accordingly
+void Hotwire_PID_input(int16_t output);
 
 #endif

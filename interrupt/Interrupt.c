@@ -9,12 +9,14 @@
 #include "../sensors/INA219.h"
 #include "../lcd/ViewController.h"
 #include "../hotwire/Hotwire.h"
+#include "../pid/PID.h"
+
 // EFFECTS: inits the system tick
 void Interrupt_init() {
 	// TODO: move timer start from debounce to here
 }
 
-// EFFECTS: executes on overflow of timer0
+// EFFECTS: executes on overflow of timer0 (62.5kHz)
 ISR(TIMER0_OVF_vect) {
 	// DEBOUNCE SERVICE
 	if(debounce_num_ticks++ > debounce_max_ticks) {
@@ -35,5 +37,8 @@ ISR(TIMER0_OVF_vect) {
 	}
 
 	// PID SERVICE
-	// TODO
+	if(pid_num_ticks++ > pid_max_ticks) {
+		PID_update_service();
+		pid_num_ticks = 0;
+	}
 }

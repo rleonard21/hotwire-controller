@@ -7,7 +7,10 @@
 #include <stdint.h>
 #include <avr/io.h>
 
+#define MAX_POWER_SETTING 50
+
 static uint8_t increment_value = 1;
+static float power_setting = 0.0;
 static uint8_t CS_PRESCALER = ( (1 << CS00) );
 
 // EFFECTS: initializes the device for PWM on the hotwire output
@@ -27,7 +30,7 @@ void Hotwire_init() {
 
 	// Set OCR1B such that the PWM is constantly zero until Hotwire_set()
 //	OCR1B = ICR1;
-	OCR1B = 30;
+	OCR1B = 0;
 }
 
 // EFFECTS: sets the PWM pulse width to the given value
@@ -68,14 +71,25 @@ void Hotwire_set_top(uint16_t value) {
 // EFFECTS: increments the PWM pulse width
 void Hotwire_increment() {
 	if(OCR1B < ICR1) {
-		OCR1B += increment_value;
+		OCR1B += 1;
 	}
 }
 
 // EFFECTS: decrements the PWM pulse width
 void Hotwire_decrement() {
 	if(OCR1B > 0) {
-		OCR1B -= increment_value;
+		OCR1B -= 1;
+	}
+}
+
+// EFFECTS: increases/decreases timer compare by input
+void Hotwire_add(int16_t value) {
+	if ((long) (OCR1B) + (long) (value) >= (long) (HOTWIRE_PWM_MAX)) {
+		OCR1B = HOTWIRE_PWM_MAX - 1;
+	} else if ((long) (OCR1B) + (long) (value) <= 0) {
+		OCR1B = 0;
+	} else {
+		OCR1B += value;
 	}
 }
 
@@ -122,4 +136,21 @@ uint16_t Hotwire_is_running() {
 // EFFECTS: returns the percent duty cycle
 float Hotwire_get_duty() {
 	return (float)(OCR1B) / (float)(HOTWIRE_PWM_MAX) * 100.0;
+}
+
+// EFFECTS: returns the power setting
+float Hotwire_get_power() {
+	return power_setting;
+}
+
+// EFFECTS: increments/decrements power setting
+void Hotwire_add_power_setting(float setting) {
+	if(power_setting + setting <= MAX_POWER_SETTING && power_setting + setting >= 0) {
+		power_setting += setting;
+	}
+}
+
+// EFFECTS: takes the PID controller's output as input, changes timer accordingly
+void Hotwire_PID_input(int16_t output) {
+	Hotwire_add(output);
 }
