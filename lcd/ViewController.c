@@ -112,11 +112,14 @@ void VC_startup_screen() {
 void VC_main_menu() {
 	lcd_gotoxy(0, 0);
 
-	char voltage[10];
+	char voltage[6];
+	char powerSetting[6];
+
 	StringUtility_fixed_float(voltage, INA219_getBusVoltage());
+	StringUtility_fixed_float(powerSetting, Hotwire_get_power());
 
 	sprintf(next_line_1, "  READY   %sv\n", voltage);
-	sprintf(next_line_2, "  Duty:      %d\n", OCR1B);
+	sprintf(next_line_2, "  Set:  (%sw)\n", powerSetting);
 
 	update_lcd();
 	VC_set_cursor();
@@ -132,7 +135,7 @@ void VC_hotwire_running() {
 
 	StringUtility_fixed_float(voltage, INA219_getBusVoltage());
 	StringUtility_fixed_float(current, INA219_getCurrent());
-	StringUtility_fixed_float(powerSetting, 22.50);
+	StringUtility_fixed_float(powerSetting, INA219_getPower());
 
 	sprintf(next_line_1, "RUNNING   %sv\n", voltage);
 	sprintf(next_line_2, "(%sw)  %sA\n", powerSetting, current);;

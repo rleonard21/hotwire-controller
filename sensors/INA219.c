@@ -4,11 +4,17 @@
 
 #include "INA219.h"
 #include "../i2c/i2cmaster.h"
+#include "../debug/Debug.h"
 
-volatile float bus_voltage = 0.0;
-volatile float shunt_voltage = 0.0;
-volatile float current = 1.0;
-volatile float power = 0.0;
+#define INA219_CONFIG_VALUE (0x3FFF)
+#define INA219_CAL_VALUE (0x3555)
+#define CURRENT_LSB (0.0003)
+#define POWER_LSB (20 * CURRENT_LSB)
+
+volatile double bus_voltage = 0.0;
+volatile double shunt_voltage = 0.0;
+volatile double current = 0.0;
+volatile double power = 0.0;
 
 volatile int ina219_num_ticks = 0;
 volatile int ina219_max_ticks = 2000;
@@ -37,22 +43,21 @@ int16_t read_reg(uint8_t reg) {
 
 void INA219_init() {
 	i2c_init();
-	write_reg(INA219_REG_CONFIG, 0x219F);
-	write_reg(INA219_REG_CALIBRATION, 0x5000);
-	// todo: write to calibration register
+	write_reg(INA219_REG_CONFIG, INA219_CONFIG_VALUE);
+	write_reg(INA219_REG_CALIBRATION, INA219_CAL_VALUE);
 }
 
 // EFFECTS: returns the last bus voltage
-float INA219_getBusVoltage() { return bus_voltage; }
+double INA219_getBusVoltage() { return bus_voltage; }
 
 // EFFECTS: returns the last shunt voltage
-float INA219_getShuntVoltage() { return shunt_voltage; }
+double INA219_getShuntVoltage() { return shunt_voltage; }
 
 // EFFECTS: returns the last current
-float INA219_getCurrent() { return current; }
+double INA219_getCurrent() { return current; }
 
 // EFFECTS: returns the last power
-float INA219_getPower() { return power; }
+double INA219_getPower() { return power; }
 
 // EFFECTS: sets the bus voltage
 void INA219_setBusVoltage() {
@@ -61,16 +66,22 @@ void INA219_setBusVoltage() {
 }
 
 // EFFECTS: sets the shunt voltage
-void INA219_setShuntVoltage() { shunt_voltage =  0; }
+void INA219_setShuntVoltage() {
+	int16_t shunt_raw = read_reg(INA219_REG_SHUNTVOLTAGE);
+	shunt_voltage = shunt_raw * 0.00001;
+}
 
 // EFFECTS: sets the current
 void INA219_setCurrent() {
 	int16_t current_raw = read_reg(INA219_REG_CURRENT);
-	current = current_raw * 0.2 / 1000.0;
+	current = current_raw * CURRENT_LSB;
 }
 
 // EFFECTS: sets the power
-void INA219_setPower() { power = 0; }
+void INA219_setPower() {
+	int16_t power_raw = read_reg(INA219_REG_POWER);
+	power = power_raw * POWER_LSB;
+}
 
 // EFFECTS: updates the registers
 void INA219_update_service() {
@@ -78,4 +89,8 @@ void INA219_update_service() {
 	INA219_setShuntVoltage();
 	INA219_setCurrent();
 	INA219_setPower();
+
+	debug_write(0x10, (int16_t)(bus_voltage * 1000));
+	debug_write(0x20, (int16_t )(current * 1000));
+	debug_write(0x30, (int16_t)(power * 1000));
 }

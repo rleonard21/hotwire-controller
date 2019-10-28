@@ -53,12 +53,12 @@ uint8_t Interface_main_hotwire_off() {
 
 				while (!Encoder_switch_is_high()) {
 					if (Encoder_rotary_read() == ROTATE_RIGHT) {
-						Hotwire_increment();
+						Hotwire_add_power_setting(0.1);
 						VC_main_menu();
 					}
 
 					if (Encoder_rotary_read() == ROTATE_LEFT) {
-						Hotwire_decrement();
+						Hotwire_add_power_setting(-0.1);
 						VC_main_menu();
 					}
 				}
@@ -90,12 +90,12 @@ uint8_t Interface_main_hotwire_on() {
 		}
 
 		if (Encoder_rotary_read() == ROTATE_RIGHT) {
-			Hotwire_increment();
+			Hotwire_add_power_setting(0.1);
 			VC_hotwire_running();
 		}
 
 		if (Encoder_rotary_read() == ROTATE_LEFT) {
-			Hotwire_decrement();
+			Hotwire_add_power_setting(-0.1);
 			VC_hotwire_running();
 		}
 	}

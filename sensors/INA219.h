@@ -60,21 +60,24 @@ volatile int ina219_max_ticks;
 void INA219_init();
 
 // EFFECTS: returns the last bus voltage
-float INA219_getBusVoltage();
+double INA219_getBusVoltage();
 
 // EFFECTS: returns the last shunt voltage
-float INA219_getShuntVoltage();
+double INA219_getShuntVoltage();
 
 // EFFECTS: returns the last current
-float INA219_getCurrent();
+double INA219_getCurrent();
 
 // EFFECTS: returns the last current
-float INA219_getPower();
+double INA219_getPower();
 
 // EFFECTS: updates the registers
 void INA219_update_service();
 
 // EFFECTS: reads a register from the I2C bus
 int16_t read_reg(uint8_t reg);
+
+// EFFECTS: write register debug
+void write_reg(uint8_t reg, uint16_t value);
 
 #endif
