@@ -5,6 +5,7 @@
 #include "PID.h"
 #include "../hotwire/Hotwire.h"
 #include "../sensors/INA219.h"
+#include "../debug/Debug.h"
 
 #define MAX_PID (3000)
 #define MIN_PID (-3000)
@@ -17,9 +18,9 @@ float I_error = 0.0;
 float D_error = 0.0;
 float last_error = 0.0;
 
-static const float P_gain = 20.0;
-static const float I_gain = 0.0;
-static const float D_gain = 0.0;
+static const float P_gain = 50.0;
+static const float I_gain = 1.0;
+static const float D_gain = 1.0;
 
 void PID_P_error(float set, float measure) {
 	P_error = set - measure;
@@ -50,6 +51,8 @@ void PID_update_service() {
 
 	if(output > MAX_PID) output = MAX_PID;
 	if(output < MIN_PID) output = MIN_PID;
+
+	debug_write(0x50, (int16_t)(output));
 
 	Hotwire_PID_input((int16_t)(output));
 }
