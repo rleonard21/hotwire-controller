@@ -14,9 +14,9 @@ is no flyback diode protection on this circuit.
 This controller uses the INA219 current sensor with a 0.01 ohm shunt to measure
 the electrical characteristics of the circuit. The sensor reports various voltages,
 output current, and power dissipation of the power section over the I2C protocol.
-Currently, this information is only displayed on the LCD to indicate the current
-output settings of the power module. Future plans may include automatic PID control
-over the switching duty cycle to maintain a particular power output.
+Starting with the `v1.1.0` firmware, the device uses a programmable-gain PID
+controller to modulate the duty cycle of the power stage based on the power reading
+from the INA219.
 
 ### Rotary Encoder
 The rotary encoder is the main avenue for interfacing with the controller. The encoder's two
@@ -34,7 +34,6 @@ The remaining used pins of the microcontroller are broken out to external header
 custom hardware extension modules. Additional hardware features, such as external control switches
 or sensors, can easily be integrated into the current hardware through the use of these GPIO pins.
 GPIO pin 0 is also attached to a timer output for hardware PWM functionality.
-
 
 ## Microcontroller Pinout
 All pins of the ATMega328P microcontroller are used on the board. The connections are defined as follows:
