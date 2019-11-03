@@ -17,22 +17,22 @@ volatile double current = 0.0;
 volatile double power = 0.0;
 
 volatile int ina219_num_ticks = 0;
-volatile int ina219_max_ticks = 2000;
+volatile int ina219_max_ticks = INA219_UPDATE_DIVISOR;
 
 void write_reg(uint8_t reg, uint16_t value) {
-	uint8_t msb = (uint8_t) (value >> 8);			// extract higher 8 bits
-	uint8_t lsb = (uint8_t) ((value << 8) >> 8);	// extract lower 8 bits
+	uint8_t msb = (uint8_t) (value >> 8);            // extract higher 8 bits
+	uint8_t lsb = (uint8_t) ((value << 8) >> 8);    // extract lower 8 bits
 
 	i2c_start(INA219_ADDRESS, I2C_WRITE);
-	i2c_write(reg);		// select register
-	i2c_write(msb);		// send MSB
-	i2c_write(lsb);		// send LSB
+	i2c_write(reg);        // select register
+	i2c_write(msb);        // send MSB
+	i2c_write(lsb);        // send LSB
 	i2c_stop();
 }
 
 int16_t read_reg(uint8_t reg) {
 	i2c_start(INA219_ADDRESS, I2C_WRITE);
-	i2c_write(reg);	// select register
+	i2c_write(reg);    // select register
 
 	i2c_start(INA219_ADDRESS, I2C_READ);
 	int16_t value = (i2c_readAck() << 8) | (i2c_readAck()); // read 16 bits
@@ -86,11 +86,11 @@ void INA219_setPower() {
 // EFFECTS: updates the registers
 void INA219_update_service() {
 	INA219_setBusVoltage();
-	INA219_setShuntVoltage();
+//	INA219_setShuntVoltage();
 	INA219_setCurrent();
 	INA219_setPower();
 
-	debug_write(0x10, (int16_t)(bus_voltage * 1000));
-	debug_write(0x20, (int16_t )(current * 1000));
-	debug_write(0x30, (int16_t)(power * 1000));
+	debug_write(0x10, (int16_t) (bus_voltage * 1000));
+	debug_write(0x20, (int16_t) (current * 1000));
+	debug_write(0x30, (int16_t) (power * 1000));
 }

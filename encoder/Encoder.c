@@ -31,12 +31,12 @@ void Encoder_init() {
 // EFFECTS: returns the state of the rotary encoder. handles debouncing.
 uint8_t Encoder_rotary_read() {
 	// Channel A leads channel B
-	if(Debounce_is_pressed(CHANNEL_A) && Debounce_is_low(CHANNEL_B)) {
+	if (Debounce_is_pressed(CHANNEL_A) && Debounce_is_low(CHANNEL_B)) {
 		return ROTATE_RIGHT;
 	}
 
 	// Channel B leads channel A
-	if(Debounce_is_pressed(CHANNEL_B) && Debounce_is_low(CHANNEL_A)) {
+	if (Debounce_is_pressed(CHANNEL_B) && Debounce_is_low(CHANNEL_A)) {
 		return ROTATE_LEFT;
 	}
 
@@ -70,7 +70,7 @@ uint8_t Encoder_switch_is_held(uint32_t timer_min) {
 	while (!Debounce_is_released(SWITCH)) {
 		timer++;
 
-		if(timer > timer_min) {
+		if (timer > timer_min) {
 			return 1;
 		}
 	}

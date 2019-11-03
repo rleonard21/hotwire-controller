@@ -17,12 +17,13 @@
 #include "Interface.h"
 #include "sensors/INA219.h"
 #include "pid/PID.h"
+#include "interrupt/Interrupt.h"
 
 int main(void) {
 	sei();
 
 	LCDControl_init();
-	LCDControl_set_contrast(185);
+	LCDControl_set_contrast(180);
 	LCDControl_set_backlight(255);
 
 	lcd_init(LCD_DISP_ON);
@@ -31,13 +32,14 @@ int main(void) {
 	VC_init();
 	VC_startup_screen();
 
+	Interrupt_init();
 	Hotwire_init();
 	Encoder_init();
 	Buzzer_init();
 	INA219_init();
 	PID_init();
 
-	_delay_ms(500);
+	_delay_ms(300);
 
 	uint8_t next_view = VIEW_MAIN_STOPPED;
 

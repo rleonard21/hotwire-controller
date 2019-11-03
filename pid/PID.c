@@ -9,12 +9,12 @@
 #include "../sensors/INA219.h"
 #include "../debug/Debug.h"
 
-#define MAX_PID 	(5000)
-#define MIN_PID 	(-5000)
-#define MAX_GAIN	(99.9)
+#define MAX_PID    (5000)
+#define MIN_PID    (-5000)
+#define MAX_GAIN    (99.9)
 
 volatile int pid_num_ticks = 0;
-volatile int pid_max_ticks = 2000;
+volatile int pid_max_ticks = INA219_UPDATE_DIVISOR;
 
 float P_error = 0.0;
 float I_error = 0.0;
@@ -35,7 +35,7 @@ int Set_addr = 0x30;
 // EFFECTS: initializes the PID controller
 void PID_init() {
 	uint8_t set = eeprom_read_byte(&eeprom_set + Set_addr);
-	if(set != 0xBB) {
+	if (set != 0xBB) {
 		// Save the default gains to EEPROM if they were unset before
 		PID_save_gains();
 		eeprom_update_byte(&eeprom_set + Set_addr, 0xBB);
@@ -53,8 +53,8 @@ void PID_P_error(float set, float measure) {
 void PID_I_error() {
 	I_error += P_error;
 
-	if(I_error > 50) I_error = 50;	 // restrict the output of the I term
-	if(I_error < -50) I_error = -50; // "integral windup"
+	if (I_error > 50) I_error = 50;     // restrict the output of the I term
+	if (I_error < -50) I_error = -50; // "integral windup"
 }
 
 void PID_D_error() {
@@ -73,12 +73,12 @@ void PID_update_service() {
 
 	float output = (P_error * P_gain + I_error * I_gain + D_error * D_gain);
 
-	if(output > MAX_PID) output = MAX_PID;
-	if(output < MIN_PID) output = MIN_PID;
+	if (output > MAX_PID) output = MAX_PID;
+	if (output < MIN_PID) output = MIN_PID;
 
-	debug_write(0x50, (int16_t)(output));
+	debug_write(0x50, (int16_t) (output));
 
-	Hotwire_PID_input((int16_t)(output));
+	Hotwire_PID_input((int16_t) (output));
 }
 
 // EFFECTS: returns the current P gain
@@ -97,9 +97,9 @@ float PID_get_d() {
 }
 
 void add_helper(float *gain, float value) {
-	if(*gain + value >= MAX_GAIN) {
+	if (*gain + value >= MAX_GAIN) {
 		*gain = MAX_GAIN;
-	} else if(*gain + value <= 0.0) {
+	} else if (*gain + value <= 0.0) {
 		*gain = 0.0;
 	} else {
 		*gain += value;

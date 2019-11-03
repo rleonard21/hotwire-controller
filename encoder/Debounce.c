@@ -19,16 +19,14 @@ volatile int debounce_max_ticks = 10;
 
 // EFFECTS: starts the debounce service. copies the inputs and enables the overflow interrupt vector.
 void Debounce_init(struct Button *inputs_in) {
-	for(uint8_t i = 0; i < NUM_INPUTS; i++) {
+	for (uint8_t i = 0; i < NUM_INPUTS; i++) {
 		inputs[i] = inputs_in[i];
 	}
-
-	TIMSK0 |= _BV(TOIE0);
 }
 
 // EFFECTS:  reads the button states and updates the histories of the inputs
 void Debounce_update_service() {
-	for(uint8_t index = 0; index < NUM_INPUTS; index++) {
+	for (uint8_t index = 0; index < NUM_INPUTS; index++) {
 		inputs[index].history = inputs[index].history << 1;
 		inputs[index].history |= Debounce_read(&inputs[index]);
 	}

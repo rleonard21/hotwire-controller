@@ -34,7 +34,7 @@ static struct VCO last_cursor = {0, 0, 0, NULL};
 // EFFECTS: updates the LCD to display lines 1 and 2
 static void update_lcd() {
 	if (strcmp(current_line_1, next_line_1) != 0 ||
-	    strcmp(current_line_2, next_line_2) != 0) {
+		strcmp(current_line_2, next_line_2) != 0) {
 
 		strcpy(current_line_1, next_line_1);
 		strcpy(current_line_2, next_line_2);
@@ -52,7 +52,7 @@ static void create_custom_char(char *char_array, uint8_t addr) {
 	lcd_command(0x40 + addr * 8);
 
 	// Send the data to create the char
-	for(char *ptr = char_array; ptr < char_array + 8; ptr++) {
+	for (char *ptr = char_array; ptr < char_array + 8; ptr++) {
 		lcd_data(*ptr);
 	}
 }
@@ -79,7 +79,7 @@ void VC_set_cursor() {
 	lcd_gotoxy(VCObject.x, VCObject.y);
 
 	// Create the new cursor
-	if(VCObject.direction) {
+	if (VCObject.direction) {
 		lcd_putc(LCD_INVERTED_RIGHT_ARROW);
 	} else {
 		lcd_putc(LCD_INVERTED_LEFT_ARROW);
@@ -216,7 +216,7 @@ void VC_page_incomplete_2() {
 
 // EFFECTS: updates the screen
 void VC_update_service() {
-	if(VCObject.NEXT_VC) {
+	if (VCObject.NEXT_VC) {
 		(*VCObject.NEXT_VC)();
 	}
 }

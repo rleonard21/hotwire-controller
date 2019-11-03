@@ -31,12 +31,12 @@ void Buzzer_init() {
 // EFFECTS:	 Makes the buzzer play a note according to the scale.
 //			 Duration is the time to play the note, in 0.01 second increments
 void Buzzer_play(int note, unsigned int duration) {
-	TCCR2A |= _BV(WGM21) | _BV(COM2B0);   // set up the timer for CTC mode, hardware toggle
+	TCCR2A |= _BV(WGM21) | _BV(COM2B0);  // set up the timer for CTC mode, hardware toggle
 	TCCR2A &= ~_BV(COM2B1);
-	TCCR2B |= BUZZER_PRESCALER;           // set the timer prescaler=64
-	TIMSK2 |= _BV(OCIE2A);                // enable the compare interrupt
+	TCCR2B |= BUZZER_PRESCALER;          // set the timer prescaler=64
+	TIMSK2 |= _BV(OCIE2A);               // enable the compare interrupt
 
-	OCR2A = scale[note];                  // set the note to be played
+	OCR2A = scale[note];                 // set the note to be played
 	max_buzzer_interrupts = buzzer_duration[note] * duration;
 }
 

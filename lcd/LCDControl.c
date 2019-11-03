@@ -38,28 +38,28 @@ void LCDControl_set_backlight(uint8_t value) {
 
 // EFFECTS: increments the contrast
 void LCDControl_increment_contrast() {
-	if(OCR_CONTRAST < 0xFF) {
+	if (OCR_CONTRAST < 0xFF) {
 		OCR_CONTRAST++;
 	}
 }
 
 // EFFECTS: decrements the contrast
 void LCDControl_decrement_contrast() {
-	if(OCR_CONTRAST > 0) {
+	if (OCR_CONTRAST > 0) {
 		OCR_CONTRAST--;
 	}
 }
 
 // EFFECTS: increments the backlight
 void LCDControl_increment_backlight() {
-	if(OCR_BACKLIGHT < 0xFF) {
+	if (OCR_BACKLIGHT < 0xFF) {
 		OCR_BACKLIGHT++;
 	}
 }
 
 // EFFECTS: decrements the backlight
 void LCDControl_decrement_backlight() {
-	if(OCR_BACKLIGHT > 0) {
+	if (OCR_BACKLIGHT > 0) {
 		OCR_BACKLIGHT--;
 	}
 }
