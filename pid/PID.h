@@ -37,4 +37,10 @@ void PID_add_d(float value);
 // EFFECTS: saves gains to EEPROM
 void PID_save_gains();
 
+// EFFECTS: stops the PID controller
+void PID_disable();
+
+// EFFECTS: starts the PID controller
+void PID_enable();
+
 #endif //HOTWIRE_CONTROLLER_V1_1_PID_H

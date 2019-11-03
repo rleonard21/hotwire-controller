@@ -20,6 +20,7 @@ float P_error = 0.0;
 float I_error = 0.0;
 float D_error = 0.0;
 float last_error = 0.0;
+uint8_t PID_enabled = 0;
 
 float P_gain = 1.0;
 float I_gain = 1.0;
@@ -64,6 +65,8 @@ void PID_D_error() {
 
 // EFFECTS: updates the PID loop
 void PID_update_service() {
+	if(!PID_enabled) return;
+
 	float set = Hotwire_get_power();
 	float measure = INA219_getPower();
 
@@ -126,4 +129,14 @@ void PID_save_gains() {
 	eeprom_update_float(&eeprom_base + P_addr, P_gain);
 	eeprom_update_float(&eeprom_base + I_addr, I_gain);
 	eeprom_update_float(&eeprom_base + D_addr, D_gain);
+}
+
+// EFFECTS: stops the PID controller
+void PID_disable() {
+	PID_enabled = 0;
+}
+
+// EFFECTS: starts the PID controller
+void PID_enable() {
+	PID_enabled = 1;
 }

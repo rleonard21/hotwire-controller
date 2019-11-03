@@ -3,9 +3,11 @@
 // Written by Robert Leonard
 
 #include "Hotwire.h"
+#include "../pid/PID.h"
 
 #include <stdint.h>
 #include <avr/io.h>
+
 
 #define MAX_POWER_SETTING 50
 
@@ -28,7 +30,7 @@ void Hotwire_init() {
 	ICR1 = HOTWIRE_PWM_MAX;
 
 	// Set OCR1B such that the PWM is constantly zero until Hotwire_set()
-	OCR1B = ICR1;
+	OCR1B = 0;
 }
 
 // EFFECTS: starts PWM signal on the hotwire output
@@ -39,15 +41,24 @@ void Hotwire_start() {
 
 	// Enable the timer
 	TCCR1B |= CS_PRESCALER;
+
+	// Enable the PID controller
+	PID_enable();
 }
 
 // EFFECTS: stops the PWM signal on the hotwire output
 void Hotwire_stop() {
+	// Disable the PID controller
+	PID_disable();
+
 	// Disable the timer clock
 	TCCR1B &= ~CS_PRESCALER;
 
 	// Detach the output pin from the compare register
 	TCCR1A &= ~_BV(COM1B1);
+
+	// Reset the compare value
+	OCR1B = 0;
 }
 
 // EFFECTS: increases/decreases timer compare by input
