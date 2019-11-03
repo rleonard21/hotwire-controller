@@ -9,6 +9,7 @@
 
 #include "../sensors/INA219.h"
 #include "../hotwire/Hotwire.h"
+#include "../pid/PID.h"
 
 #include <string.h>
 #include <stdio.h>
@@ -118,8 +119,8 @@ void VC_main_menu() {
 	StringUtility_fixed_float(voltage, INA219_getBusVoltage());
 	StringUtility_fixed_float(powerSetting, Hotwire_get_power());
 
-	sprintf(next_line_1, "  READY   %sv\n", voltage);
-	sprintf(next_line_2, "  Set:  (%sw)\n", powerSetting);
+	sprintf(next_line_1, "  READY    %sv\n", voltage);
+	sprintf(next_line_2, "  Set:   (%sw)\n", powerSetting);
 
 	update_lcd();
 	VC_set_cursor();
@@ -131,14 +132,16 @@ void VC_hotwire_running() {
 
 	char voltage[6];
 	char current[6];
+	char power[6];
 	char powerSetting[6];
 
 	StringUtility_fixed_float(voltage, INA219_getBusVoltage());
 	StringUtility_fixed_float(current, INA219_getCurrent());
-	StringUtility_fixed_float(powerSetting, INA219_getPower());
+	StringUtility_fixed_float(power, INA219_getPower());
+	StringUtility_fixed_float(powerSetting, Hotwire_get_power());
 
-	sprintf(next_line_1, "RUNNING   %sv\n", voltage);
-	sprintf(next_line_2, "(%sw)  %sA\n", powerSetting, current);;
+	sprintf(next_line_1, "RUNNING    %sA\n", current);
+	sprintf(next_line_2, "(%sw)    %sw\n", powerSetting, power);
 
 	update_lcd();
 }
@@ -150,6 +153,7 @@ void VC_settings_main(uint8_t settings_page) {
 	const char *settings[] = {
 			"  main menu     \n",
 			"  LCD           \n",
+			"  PID           \n",
 			"                \n"
 	};
 
@@ -166,6 +170,25 @@ void VC_settings_lcd() {
 
 	sprintf(next_line_1, "  Bright:    %d\n", OCR0B);
 	sprintf(next_line_2, "  Contrast:  %d\n", OCR0A);
+
+	update_lcd();
+	VC_set_cursor();
+}
+
+// EFFECTS: displays the PID setitngs page
+void VC_settings_pid() {
+	lcd_gotoxy(0, 0);
+
+	char p[6];
+	char i[6];
+	char d[6];
+
+	StringUtility_fixed_float(p, PID_get_p());
+	StringUtility_fixed_float(i, PID_get_i());
+	StringUtility_fixed_float(d, PID_get_d());
+
+	sprintf(next_line_1, "  P:%s I:%s\n", p, i);
+	sprintf(next_line_2, "  D:%s        \n", d);
 
 	update_lcd();
 	VC_set_cursor();

@@ -11,6 +11,7 @@
 #include "hotwire/Hotwire.h"
 #include "feedback/Buzzer.h"
 #include "lcd/LCDControl.h"
+#include "pid/PID.h"
 
 #include "lcd/lcd.h"
 
@@ -23,7 +24,7 @@ uint8_t Interface_main_hotwire_off() {
 	VCObject.direction = LCD_INVERTED_LEFT_ARROW;
 	VCObject.NEXT_VC = &VC_main_menu;
 
-	while(!Encoder_switch_is_low());
+	while (!Encoder_switch_is_low());
 
 	while (1) {
 		if (Encoder_rotary_read() == ROTATE_RIGHT) {
@@ -79,8 +80,6 @@ uint8_t Interface_main_hotwire_on() {
 	VCObject.direction = LCD_NO_CURSOR;
 	VCObject.NEXT_VC = &VC_hotwire_running;
 
-//	VC_hotwire_running();
-
 	while (1) {
 		if (Encoder_switch_is_pressed()) {
 			Hotwire_stop();
@@ -123,6 +122,9 @@ uint8_t Interface_settings_main() {
 					return VIEW_SETTINGS_LCD;
 
 				case 2:
+					return VIEW_SETTINGS_PID;
+
+				case 3:
 					VC_main_menu();
 					return VIEW_MAIN_STOPPED;
 			}
@@ -208,6 +210,99 @@ uint8_t Interface_settings_lcd() {
 					else LCDControl_decrement_backlight();
 
 					VC_settings_lcd();
+				}
+			}
+
+			// Stop blinking after editing
+			VC_stop_cursor_blink();
+		}
+	}
+}
+
+// EFFECTS: handles the PID settings page
+uint8_t Interface_settings_pid() {
+	VCObject.x = 0;
+	VCObject.y = 0;
+	VCObject.direction = LCD_INVERTED_LEFT_ARROW;
+	VCObject.NEXT_VC = NULL;
+
+	char setting = 0;
+
+	VC_settings_pid();
+
+	while (1) {
+		// Handle moving the LCD selection cursor and direction arrow
+		if (Encoder_rotary_read() == ROTATE_LEFT) {
+			if (VCObject.x == 1 && VCObject.y == 1) {
+				VCObject.x = 8;
+				VCObject.y = 0;
+				setting = 'i';
+			} else if (VCObject.x == 8 && VCObject.y == 0) {
+				VCObject.x = 1;
+				setting = 'p';
+			} else if (VCObject.x == 1 && VCObject.y == 0) {
+				VCObject.x = 0;
+				VCObject.direction = LCD_INVERTED_LEFT_ARROW;
+			}
+
+			VC_set_cursor();
+			while (Encoder_rotary_read() != ROTATE_NONE);
+
+		} else if (Encoder_rotary_read() == ROTATE_RIGHT) {
+			if (VCObject.x == 0 && VCObject.y == 0) {
+				VCObject.x = 1;
+				VCObject.direction = LCD_INVERTED_RIGHT_ARROW;
+				setting = 'p';
+			} else if (VCObject.x == 1 && VCObject.y == 0) {
+				VCObject.x = 8;
+				setting = 'i';
+			} else if (VCObject.x == 8 && VCObject.y == 0) {
+				VCObject.x = 1;
+				VCObject.y = 1;
+				setting = 'd';
+			}
+
+			VC_set_cursor();
+			while (Encoder_rotary_read() != ROTATE_NONE);
+		}
+		// Handle the encoder button press
+		if (Encoder_switch_is_pressed()) {
+			// Back button pressed
+			if (VCObject.x == 0 && VCObject.y == 0) {
+				PID_save_gains();
+				return VIEW_SETTINGS_MAIN;
+			}
+
+			// Wait for encoder to be released
+			while (!Encoder_switch_is_released());
+
+			// Start blinking the cursor to tell which value is being edited
+			VC_set_cursor_blink();
+
+			// Edit the LCD values until the encoder button is pressed
+			while (!Encoder_switch_is_high()) {
+				if (Encoder_rotary_read() == ROTATE_RIGHT) {
+					if (VCObject.x == 1 && VCObject.y == 0) {
+						PID_add_p(0.1);
+					} else if (VCObject.x == 8 && VCObject.y == 0) {
+						PID_add_i(0.1);
+					} else if (VCObject.x == 1 && VCObject.y == 1) {
+						PID_add_d(0.1);
+					}
+
+					VC_settings_pid();
+				}
+
+				if (Encoder_rotary_read() == ROTATE_LEFT) {
+					if (setting == 'p') {
+						PID_add_p(-0.1);
+					} else if (setting == 'i') {
+						PID_add_i(-0.1);
+					} else if (setting == 'd') {
+						PID_add_d(-0.1);
+					}
+
+					VC_settings_pid();
 				}
 			}
 

@@ -50,6 +50,9 @@ void VC_settings_main(uint8_t settings_page);
 // EFFECTS: displays the LCD settings page
 void VC_settings_lcd();
 
+// EFFECTS: displays the PID setitngs page
+void VC_settings_pid();
+
 // EFFECTS: prints an error message
 void VC_page_incomplete();
 

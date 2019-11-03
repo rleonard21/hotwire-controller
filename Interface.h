@@ -11,6 +11,7 @@
 #define VIEW_MAIN_RUNNING   1
 #define VIEW_SETTINGS_MAIN  2
 #define VIEW_SETTINGS_LCD   3
+#define VIEW_SETTINGS_PID	4
 
 // EFFECTS: handles the main menu when the hotwire is off
 uint8_t Interface_main_hotwire_off();
@@ -24,8 +25,7 @@ uint8_t Interface_settings_main();
 // EFFECTS: handles the LCD settings page
 uint8_t Interface_settings_lcd();
 
-// TODO:
-//  * add other settings pages
-//  * add other pages as needed
+// EFFECTS: handles the PID settings page
+uint8_t Interface_settings_pid();
 
 #endif //HOTWIRE_CONTROLLER_V1_1_INTERFACE_H

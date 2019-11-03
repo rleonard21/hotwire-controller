@@ -16,13 +16,14 @@
 #include "feedback/Buzzer.h"
 #include "Interface.h"
 #include "sensors/INA219.h"
+#include "pid/PID.h"
 
 int main(void) {
 	sei();
 
 	LCDControl_init();
-	LCDControl_set_contrast(170);
-	LCDControl_set_backlight(200);
+	LCDControl_set_contrast(185);
+	LCDControl_set_backlight(255);
 
 	lcd_init(LCD_DISP_ON);
 	lcd_clrscr();
@@ -34,6 +35,7 @@ int main(void) {
 	Encoder_init();
 	Buzzer_init();
 	INA219_init();
+	PID_init();
 
 	_delay_ms(500);
 
@@ -61,8 +63,8 @@ int main(void) {
 				break;
 			}
 
-			case VIEW_SETTINGS_PWM: {
-				next_view = Interface_settings_pwm();
+			case VIEW_SETTINGS_PID: {
+				next_view = Interface_settings_pid();
 				break;
 			}
 
