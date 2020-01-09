@@ -2,8 +2,11 @@
 ### An AVR-based power supply for cutting foam.
 
 ### The circuit
-I designed the circuit using Autodesk Eagle and had the PCB manufactured by AllPCB in China. The circuit is described in detail in `hardware.md`. The current hardware revision is `v1.1`, which improved on `v1.0`'s power stage and LCD functionality. Below is an image of the current `v1.1` hardware without the LCD installed.
+I designed the circuit using Autodesk Eagle and had the PCB manufactured by AllPCB in China. The circuit is described in detail in `hardware.md`. The current hardware revision is `v1.1`, which improved on `v1.0`'s power stage and LCD functionality. Below is an image of the current `v1.1` hardware without the LCD installed. 
 ![The circuit.](https://i.imgur.com/Bllh9tt.jpg)
+
+I also machined an enclosure to house the circuit. The image below is the completed product. 
+![Completed product.](https://imgur.com/4sqpU9x.jpg)
 
 ### Results
 I designed this tool to help me build a large model airplane. Here's part of the fuselage. The pink foam was cut using my hotwire controller. The complex shapes were achieved by laser-cut wood stencils.
