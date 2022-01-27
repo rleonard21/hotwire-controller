@@ -7,7 +7,7 @@
 
 #include <stdint.h>
 
-#define HOTWIRE_PWM_MAX 0xFFFF
+#define HOTWIRE_PWM_MAX 0xFF
 
 // EFFECTS: initializes the device for PWM on the hotwire output
 void Hotwire_init();
