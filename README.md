@@ -1,5 +1,6 @@
 # Hotwire Controller
 ### An AVR-based power supply for cutting foam.
+[See the newest revision of the project here!](https://github.com/rleonard21/hotwire-lite)
 
 ### The circuit
 I designed the circuit using Autodesk Eagle and had the PCB manufactured by AllPCB in China. The circuit is described in detail in `hardware.md`. The current hardware revision is `v1.1`, which improved on `v1.0`'s power stage and LCD functionality. Below is an image of the current `v1.1` hardware without the LCD installed. 
@@ -19,3 +20,7 @@ A fully cut cross-section of the fuselage. This single piece is very light and s
 
 A partially assembled fuselage. The individual slices of the fuselage are aligned using four aluminum rods, which will be removed after the slices are bonded together. 
 ![A partially assembled fuselage](https://i.imgur.com/RZkRsTv.jpg)
+
+The individual foam slices can be seen in the incomplete CAD screenshots below:
+![](https://i.imgur.com/7qQ0Gnu.png)
+![](https://i.imgur.com/vSEEZXu.jpg)
