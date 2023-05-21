@@ -21,6 +21,9 @@ A fully cut cross-section of the fuselage. This single piece is very light and s
 A partially assembled fuselage. The individual slices of the fuselage are aligned using four aluminum rods, which will be removed after the slices are bonded together. 
 ![A partially assembled fuselage](https://i.imgur.com/RZkRsTv.jpg)
 
+A slice of the main wing's airfoil.
+![A wing slice.](https://i.imgur.com/VgkqVFO.jpg)
+
 The individual foam slices can be seen in the incomplete CAD screenshots below:
 ![](https://i.imgur.com/7qQ0Gnu.png)
 ![](https://i.imgur.com/vSEEZXu.jpg)
